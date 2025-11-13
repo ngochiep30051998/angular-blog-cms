@@ -1,0 +1,64 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+	<div class="w-full max-w-md">
+		<div class="bg-white shadow-xl rounded-2xl p-8">
+			<div class="mb-8 text-center">
+				<h1 class="text-2xl font-bold text-gray-900">Welcome back</h1>
+				<p class="mt-2 text-sm text-gray-500">Sign in to continue to your dashboard</p>
+			</div>
+
+			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+				<!-- Email -->
+				<div>
+					<label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email address</label>
+					<input
+						id="email"
+						type="email"
+						formControlName="email"
+						autocomplete="email"
+						placeholder="you@example.com"
+						class="block w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+						[ngClass]="{ 'border-red-500 ring-2 ring-red-200 focus:ring-red-400': email?.touched && email?.invalid }"
+					/>
+					<div class="mt-2 min-h-5">
+						<p *ngIf="email?.touched && email?.errors?.['required']" class="text-sm text-red-600">Email is required.</p>
+						<p *ngIf="email?.touched && email?.errors?.['email']" class="text-sm text-red-600">Enter a valid email.</p>
+					</div>
+				</div>
+
+				<!-- Password -->
+				<div>
+					<label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+					<input
+						id="password"
+						type="password"
+						formControlName="password"
+						autocomplete="current-password"
+						placeholder="Your password"
+						class="block w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+						[ngClass]="{ 'border-red-500 ring-2 ring-red-200 focus:ring-red-400': password?.touched && password?.invalid }"
+					/>
+					<div class="mt-2 min-h-5">
+						<p *ngIf="password?.touched && password?.errors?.['required']" class="text-sm text-red-600">Password is required.</p>
+						<p *ngIf="password?.touched && password?.errors?.['minlength']" class="text-sm text-red-600">Password must be at least 6 characters.</p>
+					</div>
+				</div>
+
+				<!-- Submit -->
+				<button
+					type="submit"
+					class="w-full inline-flex justify-center items-center rounded-xl bg-indigo-600 px-4 py-3 text-white font-medium shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+					[disabled]="form.invalid"
+				>
+					Sign in
+				</button>
+			</form>
+		</div>
+
+		<p class="mt-6 text-center text-sm text-gray-500">
+			By continuing, you agree to our
+			<a class="text-indigo-600 hover:text-indigo-700 font-medium" href="javascript:void(0)">Terms</a>
+			and
+			<a class="text-indigo-600 hover:text-indigo-700 font-medium" href="javascript:void(0)">Privacy Policy</a>.
+		</p>
+	</div>
+</div>
