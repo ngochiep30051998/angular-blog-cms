@@ -1,0 +1,37 @@
+---
+alwaysApply: true
+---
+
+## Project Context
+- Angular 20 using standalone components and new features
+- TypeScript with strict typing enabled
+- Functional reactive patterns preferred (signals, pipes)
+- Strong typing with interfaces and type safety
+- Avoid any, prefer explicit and narrow types
+
+## Naming Conventions
+- Use PascalCase for classes and interfaces
+- Use camelCase for variables, functions, and methods
+- File names in kebab-case
+
+## Component Rules
+- Use standalone components wherever possible
+- Use inject() function for dependency injection inside setup logic
+- Prefer pure functions and signals for state management over mutable state
+- Use Angular Signals and RxJS operators for reactive data flow
+- Use typed Inputs and Outputs with interfaces
+## TypeScript Rules
+- Always declare explicit types for variables and function signatures
+- Avoid use of any; create custom types or interfaces
+- Use readonly properties where possible
+- Use template strings for multi-line strings
+- Use optional chaining (?.) and nullish coalescing (??) operators
+
+## Code Style
+- Use function names starting with verbs (e.g., fetchData)
+- Short functions, single responsibility principle
+- Use early return for conditional checks
+- Use arrow functions for short callbacks (<=3 lines)
+
+## Example Angular Component Rule:
+- use @if, @for,....

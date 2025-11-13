@@ -1,4 +1,4 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+<div class="min-h-screen flex items-center justify-center px-4">
 	<div class="w-full max-w-md">
 		<div class="bg-white shadow-xl rounded-2xl p-8">
 			<div class="mb-8 text-center">
@@ -6,7 +6,7 @@
 				<p class="mt-2 text-sm text-gray-500">Sign in to continue to your dashboard</p>
 			</div>
 
-			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+			<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
 				<!-- Email -->
 				<div>
 					<label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email address</label>
@@ -19,9 +19,13 @@
 						class="block w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
 						[ngClass]="{ 'border-red-500 ring-2 ring-red-200 focus:ring-red-400': email?.touched && email?.invalid }"
 					/>
-					<div class="mt-2 min-h-5">
-						<p *ngIf="email?.touched && email?.errors?.['required']" class="text-sm text-red-600">Email is required.</p>
-						<p *ngIf="email?.touched && email?.errors?.['email']" class="text-sm text-red-600">Enter a valid email.</p>
+					<div class="mt-2">
+						@if (email?.touched && email?.errors?.['required']) {
+							<p class="text-sm text-red-600">Email is required.</p>
+						}
+						@if (email?.touched && email?.errors?.['email']) {
+							<p class="text-sm text-red-600">Enter a valid email.</p>
+						}
 					</div>
 				</div>
 
@@ -38,8 +42,12 @@
 						[ngClass]="{ 'border-red-500 ring-2 ring-red-200 focus:ring-red-400': password?.touched && password?.invalid }"
 					/>
 					<div class="mt-2 min-h-5">
-						<p *ngIf="password?.touched && password?.errors?.['required']" class="text-sm text-red-600">Password is required.</p>
-						<p *ngIf="password?.touched && password?.errors?.['minlength']" class="text-sm text-red-600">Password must be at least 6 characters.</p>
+						@if (password?.touched && password?.errors?.['required']) {
+							<p class="text-sm text-red-600">Password is required.</p>
+						}
+						@if (password?.touched && password?.errors?.['minlength']) {
+							<p class="text-sm text-red-600">Password must be at least 6 characters.</p>
+						}
 					</div>
 				</div>
 
