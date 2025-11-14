@@ -3,6 +3,6 @@ import { publicRoutes } from './layouts/public-layout/public.routes';
 import { privateRoutes } from './layouts/private-layout/private.routes';
 
 export const routes: Routes = [
-   ...publicRoutes,
-   ...privateRoutes,
+    ...privateRoutes,
+    ...publicRoutes,
 ];

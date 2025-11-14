@@ -32,6 +32,6 @@ alwaysApply: true
 - Short functions, single responsibility principle
 - Use early return for conditional checks
 - Use arrow functions for short callbacks (<=3 lines)
-
+- Use space 4
 ## Example Angular Component Rule:
 - use @if, @for,....
