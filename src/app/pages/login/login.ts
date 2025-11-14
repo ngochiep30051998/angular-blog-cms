@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ApiService } from '../../services/api-service';
 import { StorageService } from '../../services/storage-service';
 import { Router } from '@angular/router';
+import { LoadingService } from '../../services/loading-service';
 
 @Component({
     selector: 'app-login',
@@ -16,6 +17,7 @@ export class Login {
     private apiService = inject(ApiService)
     private storageService = inject(StorageService)
     private router = inject(Router)
+    private loadingService = inject(LoadingService)
     form: FormGroup;
 
     constructor(private readonly formBuilder: FormBuilder) {
@@ -41,14 +43,17 @@ export class Login {
         // UI only: handle successful validation (no API call)
         // eslint-disable-next-line no-console
         console.log('Login form value', this.form.value);
+        this.loadingService.show();
         this.apiService.login(this.form.value).subscribe({
             next: (res) => {
                 console.log(res.data)
                 const { access_token } = res.data;
                 this.storageService.token = access_token;
                 this.router.navigate(['/home'])
+                this.loadingService.hide()
             },
             error: (err) => {
+                this.loadingService.hide()
                 console.log(err)
             }
         })
