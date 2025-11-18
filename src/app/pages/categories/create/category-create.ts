@@ -1,23 +1,35 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../../services/api-service';
 import { LoadingService } from '../../../services/loading-service';
-import { ICategoryCreateRequest } from '../../../interfaces/category';
+import { ICategoryCreateRequest, ICategoryResponse } from '../../../interfaces/category';
+import { CustomSelect, SelectOption } from '../../../components/custom-select/custom-select';
 
 @Component({
   selector: 'app-category-create',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, CustomSelect],
   templateUrl: './category-create.html',
   styleUrl: './category-create.scss',
 })
-export class CategoryCreate {
+export class CategoryCreate implements OnInit {
   private readonly apiService = inject(ApiService);
   private readonly loadingService = inject(LoadingService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly router = inject(Router);
+
+  protected readonly categories = signal<ICategoryResponse[]>([]);
+
+  protected readonly categoryOptions = computed<SelectOption[]>(() => {
+    return this.categories().map((category) => ({
+      id: category._id,
+      label: category.name,
+      name: category.name,
+      _id: category._id,
+    }));
+  });
 
   protected readonly form: FormGroup = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -25,6 +37,23 @@ export class CategoryCreate {
     slug: [''],
     parent_id: [''],
   });
+
+  public ngOnInit(): void {
+    this.loadCategories();
+  }
+
+  private loadCategories(): void {
+    this.apiService.getCategories().subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.categories.set(response.data);
+        }
+      },
+      error: () => {
+        // Handle error silently
+      },
+    });
+  }
 
   protected submit(): void {
     if (this.form.invalid) {

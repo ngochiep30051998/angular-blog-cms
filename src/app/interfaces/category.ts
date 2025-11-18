@@ -9,9 +9,7 @@ export interface ICategoryResponse {
     _id: string;
     name: string;
     description?: string | null;
-    slug?: {
-        value: string;
-    } | null;
+    slug?: string
     parent_id?: string | null;
     path: string;
     created_at: string;

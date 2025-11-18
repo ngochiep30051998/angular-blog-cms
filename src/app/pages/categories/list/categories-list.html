@@ -35,20 +35,57 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-          @if (categories().length === 0) {
+          @if (allCategories().length === 0) {
             <tr>
               <td colspan="5" class="px-6 py-8 text-center text-gray-500">
                 No categories found. Create a new one to get started.
               </td>
             </tr>
           }
-          @for (category of categories(); track category._id) {
-            <tr class="hover:bg-gray-50 transition-colors">
+          @for (category of allCategories(); track category._id) {
+            <tr class="hover:bg-gray-50 transition-colors" [class.bg-gray-50]="category.isChild">
               <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm font-medium text-gray-900">{{ category.name }}</div>
+                <div class="flex items-center gap-3">
+                  @if (category.isChild) {
+                    <div class="w-1 h-6 bg-gray-300 rounded"></div>
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                      </svg>
+                      <div class="text-sm font-medium text-gray-700">{{ category.name }}</div>
+                      <span class="text-xs text-gray-400">(child of {{ category.parentName }})</span>
+                    </div>
+                  } @else {
+                    <div class="flex items-center gap-2">
+                      @if (hasChildren(category)) {
+                        <button
+                          type="button"
+                          (click)="toggleCategory(category._id)"
+                          class="p-1 hover:bg-gray-200 rounded transition-colors"
+                        >
+                          <svg
+                            class="w-4 h-4 text-gray-600 transition-transform duration-200"
+                            [class.rotate-90]="isExpanded(category._id)"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      } @else {
+                        <div class="w-6"></div>
+                      }
+                      <div class="text-sm font-medium text-gray-900">{{ category.name }}</div>
+                      @if (hasChildren(category)) {
+                        <span class="text-xs text-gray-400">({{ category.children.length }} children)</span>
+                      }
+                    </div>
+                  }
+                </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-500">{{ category.slug?.value || '-' }}</div>
+                <div class="text-sm text-gray-500">{{ category.slug || '-' }}</div>
               </td>
               <td class="px-6 py-4">
                 <div class="text-sm text-gray-500 max-w-xs truncate">

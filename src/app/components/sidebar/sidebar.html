@@ -1,19 +1,29 @@
-<aside [class]="isCollapsed() ? 'w-20' : 'w-64'" class="bg-gray-900 text-white h-full flex flex-col transition-all duration-300">
-    <nav class="p-4 flex-1">
-        <ul class="space-y-2">
+<aside [class]="isCollapsed() ? 'w-20' : 'w-64'" class="bg-gray-800 text-white h-full flex flex-col transition-all duration-300">
+    <nav class="p-4 flex-1 overflow-y-auto">
+        <ul class="space-y-1">
             @for (item of menuItems; track item.route) {
                 <li>
                     <a
                         [routerLink]="item.route"
-                        routerLinkActive="bg-blue-600 text-white"
+                        routerLinkActive="bg-gradient-to-r from-purple-600 to-orange-500 text-white"
                         [routerLinkActiveOptions]="{ exact: false }"
                         [class]="isCollapsed() ? 'justify-center' : ''"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 cursor-pointer relative group text-gray-300"
                         [title]="isCollapsed() ? item.label : ''"
                     >
-                        <span class="text-xl flex-shrink-0">{{ item.icon }}</span>
+                        <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center">
+                            <img [src]="item.icon" [alt]="item.label" class="w-5 h-5 brightness-0 invert" />
+                        </div>
                         @if (!isCollapsed()) {
-                            <span class="font-medium whitespace-nowrap">{{ item.label }}</span>
+                            <span class="font-medium whitespace-nowrap flex-1">{{ item.label }}</span>
+                            @if (item.badge) {
+                                <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center">
+                                    {{ item.badge }}
+                                </span>
+                            }
+                        }
+                        @if (isCollapsed() && item.badge) {
+                            <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                         }
                     </a>
                 </li>
@@ -23,7 +33,7 @@
     <div class="p-4 border-t border-gray-700">
         <button
             (click)="toggleCollapse()"
-            class="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
+            class="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
             [title]="isCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
         >
             <span [class]="isCollapsed() ? 'rotate-180' : ''" class="text-xl transition-transform duration-300">«</span>

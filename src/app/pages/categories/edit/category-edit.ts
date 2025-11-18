@@ -1,15 +1,16 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../../services/api-service';
 import { LoadingService } from '../../../services/loading-service';
 import { ICategoryCreateRequest, ICategoryResponse } from '../../../interfaces/category';
+import { CustomSelect, SelectOption } from '../../../components/custom-select/custom-select';
 
 @Component({
   selector: 'app-category-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, CustomSelect],
   templateUrl: './category-edit.html',
   styleUrl: './category-edit.scss',
 })
@@ -28,8 +29,22 @@ export class CategoryEdit implements OnInit {
   });
 
   protected readonly category = signal<ICategoryResponse | null>(null);
+  protected readonly categories = signal<ICategoryResponse[]>([]);
 
-  private categoryId: string | null = null;
+  protected readonly categoryOptions = computed<SelectOption[]>(() => {
+    return this.categories().map((category) => ({
+      id: category._id,
+      label: category.name,
+      name: category.name,
+      _id: category._id,
+    }));
+  });
+
+  protected readonly childrenCategories = computed<ICategoryResponse[]>(() => {
+    return this.category()?.children || [];
+  });
+
+  protected categoryId: string | null = null;
 
   public ngOnInit(): void {
     this.categoryId = this.route.snapshot.paramMap.get('categoryId');
@@ -37,7 +52,21 @@ export class CategoryEdit implements OnInit {
       this.router.navigate(['/categories']);
       return;
     }
+    this.loadCategories();
     this.fetchCategory(this.categoryId);
+  }
+
+  private loadCategories(): void {
+    this.apiService.getCategories().subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.categories.set(response.data);
+        }
+      },
+      error: () => {
+        // Handle error silently
+      },
+    });
   }
 
   protected fetchCategory(categoryId: string): void {
@@ -49,7 +78,7 @@ export class CategoryEdit implements OnInit {
           this.form.patchValue({
             name: response.data.name,
             description: response.data.description ?? '',
-            slug: response.data.slug?.value ?? '',
+            slug: response.data.slug ?? '',
             parent_id: response.data.parent_id ?? '',
           });
         } else {
