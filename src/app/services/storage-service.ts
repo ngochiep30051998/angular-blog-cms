@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { StorageEnum } from '../enums/storage.enum';
 import { IUser } from '../interfaces/user.interface';
 
@@ -8,6 +8,10 @@ import { IUser } from '../interfaces/user.interface';
 export class StorageService {
     private readonly storage = localStorage;
     private readonly storageKey = StorageEnum;
+    
+    private readonly _userProfile = signal<IUser | null>(null);
+    public readonly userProfile = this._userProfile.asReadonly();
+
     getItem(key: StorageEnum): string | null {
         return this.storage.getItem(key);
     }
@@ -35,23 +39,7 @@ export class StorageService {
         this.setItem(this.storageKey.TOKEN, value);
     }
 
-    public get userProfile(): IUser | null {
-        const userData = this.getItem(this.storageKey.USER);
-        if (userData) {
-            try {
-                return JSON.parse(userData) as IUser;
-            } catch {
-                return null;
-            }
-        }
-        return null;
-    }
-
-    public set userProfile(value: IUser | null) {
-        if (value === null) {
-            this.removeItem(this.storageKey.USER);
-        } else {
-            this.setItem(this.storageKey.USER, JSON.stringify(value));
-        }
+    public setUserProfile(value: IUser | null): void {
+        this._userProfile.set(value);
     }
 }
