@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { IBaseResponse } from '../interfaces/base-response';
 import { ILogin, IReqLogin } from '../interfaces/login';
 import { ICategoryCreateRequest, ICategoryResponse } from '../interfaces/category';
+import { IUser } from '../interfaces/user.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -42,5 +43,9 @@ export class ApiService {
 
     deleteCategory(categoryId: string): Observable<IBaseResponse<boolean>> {
         return this.httpClient.delete<IBaseResponse<boolean>>(`${this.apiUrl}/categories/${categoryId}`);
+    }
+
+    getUserProfile(): Observable<IBaseResponse<IUser>> {
+        return this.httpClient.get<IBaseResponse<IUser>>(`${this.apiUrl}/users/profile`);
     }
 }

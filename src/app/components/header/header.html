@@ -6,11 +6,11 @@
         <div class="flex items-center gap-4">
             <div class="relative group flex items-center gap-3 cursor-pointer" tabindex="0">
                 <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                    <span class="text-white font-semibold text-sm">A</span>
+                    <span class="text-white font-semibold text-sm">{{ userInitial }}</span>
                 </div>
                 <div class="hidden md:block text-right">
-                    <p class="text-sm font-medium text-gray-700">Admin</p>
-                    <p class="text-xs text-gray-500">admin@example.com</p>
+                    <p class="text-sm font-medium text-gray-700">{{ userProfile?.full_name || 'User' }}</p>
+                    <p class="text-xs text-gray-500">{{ userProfile?.email || '' }}</p>
                 </div>
                 <div
                     class="absolute right-0 top-full mt-2 hidden group-hover:block group-focus-within:block"
