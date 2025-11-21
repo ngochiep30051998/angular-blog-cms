@@ -74,7 +74,18 @@ export class CategoriesList implements OnInit {
   }
 
   protected hasChildren(category: ICategoryResponse): boolean {
-    return category.children && category.children.length > 0;
+    if (!category.children) {
+      return false;
+    }
+    if (!Array.isArray(category.children)) {
+      return false;
+    }
+    if (category.children.length === 0) {
+      return false;
+    }
+    // Filter out any null/undefined children and check if there are valid children
+    const validChildren = category.children.filter(child => child && child._id);
+    return validChildren.length > 0;
   }
 
   public ngOnInit(): void {

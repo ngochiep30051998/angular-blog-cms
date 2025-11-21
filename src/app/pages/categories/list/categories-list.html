@@ -47,7 +47,7 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center gap-2" [style.padding-left.px]="category.level * 24">
                   <div class="flex items-center gap-2 flex-1">
-                    @if (hasChildren(category) && category.children && category.children.length > 0) {
+                    @if (hasChildren(category)) {
                       <button
                         type="button"
                         (click)="toggleCategory(category._id)"
