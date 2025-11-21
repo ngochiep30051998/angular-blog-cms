@@ -6,7 +6,7 @@
     </div>
     <a
       routerLink="/categories"
-      class="text-white bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-xl text-sm px-4 py-2.5 text-center transition-all duration-200"
+      class="btn-danger"
     >
       Back to list
     </a>
@@ -71,14 +71,14 @@
       <button
         type="submit"
         [disabled]="form.invalid"
-        class="px-4 py-2 text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-xl text-sm text-center transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:from-gray-400 disabled:hover:to-gray-400"
+        class="btn-primary"
       >
         Save Changes
       </button>
       <button
         type="button"
         routerLink="/categories"
-        class="px-4 py-2 bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-xl hover:from-gray-500 hover:to-gray-600 transition-all duration-200 font-semibold"
+        class="btn-secondary"
       >
         Cancel
       </button>
@@ -106,7 +106,7 @@
             </div>
             <a
               [routerLink]="['/categories', child._id, 'edit']"
-              class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 font-medium text-sm"
+              class="btn-edit"
             >
               Edit
             </a>
