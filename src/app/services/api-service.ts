@@ -38,7 +38,7 @@ export class ApiService {
     }
 
     updateCategory(categoryId: string, req: ICategoryCreateRequest): Observable<IBaseResponse<ICategoryResponse>> {
-        return this.httpClient.put<IBaseResponse<ICategoryResponse>>(`${this.apiUrl}/categories/${categoryId}`, req);
+        return this.httpClient.patch<IBaseResponse<ICategoryResponse>>(`${this.apiUrl}/categories/${categoryId}`, req);
     }
 
     deleteCategory(categoryId: string): Observable<IBaseResponse<boolean>> {
