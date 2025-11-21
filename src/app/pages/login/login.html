@@ -2,7 +2,7 @@
 	<div class="w-full max-w-md">
 		<div class="bg-white shadow-xl rounded-2xl p-8">
 			<div class="mb-8 text-center">
-				<h1 class="text-2xl font-bold text-gray-900">Welcome back</h1>
+				<h1 class="text-sm font-bold text-gray-900">Welcome back</h1>
 				<p class="mt-2 text-sm text-gray-500">Sign in to continue to your dashboard</p>
 			</div>
 
@@ -16,7 +16,7 @@
 						formControlName="email"
 						autocomplete="email"
 						placeholder="you@example.com"
-						class="block w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+						class="block w-full rounded-xl border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
 						[ngClass]="{ 'border-red-500 ring-2 ring-red-200 focus:ring-red-400': email?.touched && email?.invalid }"
 					/>
 					<div class="mt-2">
@@ -38,7 +38,7 @@
 						formControlName="password"
 						autocomplete="current-password"
 						placeholder="Your password"
-						class="block w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+						class="block w-full rounded-xl border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
 						[ngClass]="{ 'border-red-500 ring-2 ring-red-200 focus:ring-red-400': password?.touched && password?.invalid }"
 					/>
 					<div class="mt-2 min-h-5">
@@ -54,7 +54,7 @@
 				<!-- Submit -->
 				<button
 					type="submit"
-					class="w-full inline-flex justify-center items-center rounded-xl bg-indigo-600 px-4 py-3 text-white font-medium shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+					class="w-full inline-flex justify-center items-center rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-2 text-white font-medium shadow-sm hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 disabled:hover:from-blue-500 disabled:hover:to-purple-600"
 					[disabled]="form.invalid"
 				>
 					Sign in

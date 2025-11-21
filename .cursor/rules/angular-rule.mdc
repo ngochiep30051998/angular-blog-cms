@@ -40,3 +40,9 @@ alwaysApply: true
 - Services is creating in src/app/services folder
 - Interfaces is creating in src/app/interfaces folder
 - All apis is creating in api-service.ts
+
+## Style rules
+- Use tailwind css
+- Button Gradient duotone style, size medium
+- default font-size as text-sm 
+- default input styles as px-3 py-2

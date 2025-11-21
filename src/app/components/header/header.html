@@ -1,7 +1,7 @@
 <header class="bg-white shadow-md border-b border-gray-200">
     <div class="px-6 py-4 flex items-center justify-between">
         <div class="flex items-center gap-3">
-            <h1 class="text-2xl font-bold text-gray-800">Blog CMS</h1>
+            <h1 class="text-sm font-bold text-gray-800">Blog CMS</h1>
         </div>
         <div class="flex items-center gap-4">
             <div class="relative group flex items-center gap-3 cursor-pointer" tabindex="0">
@@ -10,7 +10,7 @@
                 </div>
                 <div class="hidden md:block text-right">
                     <p class="text-sm font-medium text-gray-700">{{ userProfile()?.full_name || 'User' }}</p>
-                    <p class="text-xs text-gray-500">{{ userProfile()?.email || '' }}</p>
+                    <p class="text-sm text-gray-500">{{ userProfile()?.email || '' }}</p>
                 </div>
                 <div
                     class="absolute right-0 top-full mt-2 hidden group-hover:block group-focus-within:block"
@@ -18,7 +18,7 @@
                     <button
                         type="button"
                         (click)="logout()"
-                        class="px-4 py-2 rounded-lg border border-gray-200 bg-white text-sm font-semibold text-gray-700 shadow-lg hover:bg-gray-50 transition-colors duration-200"
+                        class="px-4 py-2 rounded-lg bg-gradient-to-r from-red-500 to-pink-600 text-white text-sm font-semibold shadow-lg hover:from-red-600 hover:to-pink-700 transition-all duration-200"
                     >
                         Logout
                     </button>

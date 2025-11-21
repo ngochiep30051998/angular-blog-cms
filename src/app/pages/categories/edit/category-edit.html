@@ -1,12 +1,12 @@
 <div class="max-w-3xl mx-auto space-y-6">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-3xl font-bold text-gray-800">Edit Category</h1>
-      <p class="text-gray-500">Update category information</p>
+      <h1 class="text-sm font-bold text-gray-800">Edit Category</h1>
+      <p class="text-sm text-gray-500">Update category information</p>
     </div>
     <a
       routerLink="/categories"
-      class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors duration-200 font-medium"
+      class="text-white bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-xl text-sm px-4 py-2.5 text-center transition-all duration-200"
     >
       Back to list
     </a>
@@ -19,7 +19,7 @@
         id="name"
         type="text"
         formControlName="name"
-        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+        class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
         [class.border-red-500]="name?.touched && name?.invalid"
         placeholder="Enter category name"
       />
@@ -37,7 +37,7 @@
         id="description"
         formControlName="description"
         rows="4"
-        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
+        class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
         placeholder="Describe this category (optional)"
       ></textarea>
     </div>
@@ -49,7 +49,7 @@
           id="slug"
           type="text"
           formControlName="slug"
-          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+          class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
           placeholder="auto-generated-if-empty"
         />
       </div>
@@ -71,14 +71,14 @@
       <button
         type="submit"
         [disabled]="form.invalid"
-        class="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors duration-200 font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed"
+        class="px-4 py-2 text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-xl text-sm text-center transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:from-gray-400 disabled:hover:to-gray-400"
       >
         Save Changes
       </button>
       <button
         type="button"
         routerLink="/categories"
-        class="px-6 py-3 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 transition-colors duration-200 font-semibold"
+        class="px-4 py-2 bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-xl hover:from-gray-500 hover:to-gray-600 transition-all duration-200 font-semibold"
       >
         Cancel
       </button>
@@ -87,7 +87,7 @@
 
   @if (childrenCategories().length > 0) {
     <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-8">
-      <h2 class="text-xl font-bold text-gray-800 mb-4">Children Categories</h2>
+      <h2 class="text-sm font-bold text-gray-800 mb-4">Children Categories</h2>
       <div class="space-y-3">
         @for (child of childrenCategories(); track child._id) {
           <div class="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
@@ -106,7 +106,7 @@
             </div>
             <a
               [routerLink]="['/categories', child._id, 'edit']"
-              class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium text-sm"
+              class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 font-medium text-sm"
             >
               Edit
             </a>
