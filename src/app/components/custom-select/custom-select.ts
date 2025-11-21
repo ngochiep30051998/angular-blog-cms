@@ -5,6 +5,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export interface SelectOption {
     id: string;
     label: string;
+    level?: number;
     [key: string]: any;
 }
 

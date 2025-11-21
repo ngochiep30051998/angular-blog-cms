@@ -23,12 +23,26 @@ export class CategoryCreate implements OnInit {
   protected readonly categories = signal<ICategoryResponse[]>([]);
 
   protected readonly categoryOptions = computed<SelectOption[]>(() => {
-    return this.categories().map((category) => ({
-      id: category._id,
-      label: category.name,
-      name: category.name,
-      _id: category._id,
-    }));
+    const options: SelectOption[] = [];
+    
+    const flattenCategories = (cats: ICategoryResponse[], level: number = 0): void => {
+      cats.forEach((category) => {
+        options.push({
+          id: category._id,
+          label: category.name,
+          name: category.name,
+          _id: category._id,
+          level: level,
+        });
+        
+        if (category.children && category.children.length > 0) {
+          flattenCategories(category.children, level + 1);
+        }
+      });
+    };
+    
+    flattenCategories(this.categories());
+    return options;
   });
 
   protected readonly form: FormGroup = this.formBuilder.group({

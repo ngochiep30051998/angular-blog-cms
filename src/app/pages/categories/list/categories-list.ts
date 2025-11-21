@@ -7,8 +7,9 @@ import { ModalService } from '../../../services/modal-service';
 import { ICategoryResponse } from '../../../interfaces/category';
 
 interface FlatCategory extends ICategoryResponse {
-  isChild?: boolean;
+  level: number;
   parentName?: string;
+  categoryPath: string[];
 }
 
 @Component({
@@ -33,17 +34,23 @@ export class CategoriesList implements OnInit {
     const flatList: FlatCategory[] = [];
     const expanded = this.expandedCategories();
     
-    const flattenCategories = (cats: ICategoryResponse[], isChild = false, parentName?: string, parentId?: string) => {
+    const flattenCategories = (
+      cats: ICategoryResponse[],
+      level: number = 0,
+      parentName?: string,
+      categoryPath: string[] = []
+    ): void => {
       cats.forEach((category) => {
+        const currentPath = [...categoryPath, category._id];
         flatList.push({
           ...category,
-          isChild,
+          level,
           parentName,
-          parent_id: parentId || category.parent_id,
+          categoryPath: currentPath,
         });
         
         if (category.children && category.children.length > 0 && expanded.has(category._id)) {
-          flattenCategories(category.children, true, category.name, category._id);
+          flattenCategories(category.children, level + 1, category.name, currentPath);
         }
       });
     };
