@@ -1,8 +1,9 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ApiService } from '../../../services/api-service';
 import { LoadingService } from '../../../services/loading-service';
+import { ModalService } from '../../../services/modal-service';
 import { ICategoryResponse } from '../../../interfaces/category';
 
 interface FlatCategory extends ICategoryResponse {
@@ -20,9 +21,13 @@ interface FlatCategory extends ICategoryResponse {
 export class CategoriesList implements OnInit {
   private readonly apiService = inject(ApiService);
   private readonly loadingService = inject(LoadingService);
+  private readonly modalService = inject(ModalService);
+
+  @ViewChild('deleteConfirmTemplate') deleteConfirmTemplate!: TemplateRef<unknown>;
 
   protected readonly categories = signal<ICategoryResponse[]>([]);
   protected readonly expandedCategories = signal<Set<string>>(new Set());
+  protected categoryToDelete: string | null = null;
 
   protected readonly allCategories = computed<FlatCategory[]>(() => {
     const flatList: FlatCategory[] = [];
@@ -88,11 +93,23 @@ export class CategoriesList implements OnInit {
   }
 
   protected deleteCategory(categoryId: string): void {
-    const confirmDelete = confirm('Are you sure you want to delete this category?');
-    if (!confirmDelete) {
-      return;
-    }
+    this.categoryToDelete = categoryId;
+    const modalRef = this.modalService.open(this.deleteConfirmTemplate, {
+      title: 'Confirm Delete',
+      width: '400px',
+      closeOnBackdropClick: true,
+      showCloseButton: true,
+    });
 
+    modalRef.afterClosed().then((result) => {
+      if (result === true && this.categoryToDelete) {
+        this.performDelete(this.categoryToDelete);
+      }
+      this.categoryToDelete = null;
+    });
+  }
+
+  private performDelete(categoryId: string): void {
     this.loadingService.show();
     this.apiService.deleteCategory(categoryId).subscribe({
       next: () => {
@@ -102,6 +119,14 @@ export class CategoriesList implements OnInit {
         this.loadingService.hide();
       },
     });
+  }
+
+  protected confirmDelete(): void {
+    this.modalService.close(true);
+  }
+
+  protected cancelDelete(): void {
+    this.modalService.close(false);
   }
 }
 

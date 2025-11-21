@@ -5,3 +5,18 @@
 @tailwind utilities;
 
 /* You can add global styles to this file, and also import other style files */
+
+/* Modal Overlay Styles */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.modal-panel {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    max-width: 90vw;
+    max-height: 90vh;
+}
