@@ -103,4 +103,12 @@ export class ApiService {
     deletePost(postId: string): Observable<IBaseResponse<boolean>> {
         return this.httpClient.delete<IBaseResponse<boolean>>(`${this.apiUrl}/posts/${postId}`);
     }
+
+    publishPost(postId: string): Observable<IBaseResponse<IPostResponse>> {
+        return this.httpClient.patch<IBaseResponse<IPostResponse>>(`${this.apiUrl}/posts/${postId}/publish`, {});
+    }
+
+    unpublishPost(postId: string): Observable<IBaseResponse<IPostResponse>> {
+        return this.httpClient.patch<IBaseResponse<IPostResponse>>(`${this.apiUrl}/posts/${postId}/unpublish`, {});
+    }
 }

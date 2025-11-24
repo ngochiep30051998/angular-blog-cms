@@ -209,13 +209,13 @@
                     }
                 ]
             },
-            "put": {
+            "patch": {
                 "tags": [
                     "posts"
                 ],
                 "summary": "Update a blog post",
-                "description": "Update a blog post",
-                "operationId": "update_post_api_v1_posts__post_id__put",
+                "description": "Update a blog post (partial update)",
+                "operationId": "update_post_api_v1_posts__post_id__patch",
                 "parameters": [
                     {
                         "name": "post_id",
@@ -232,11 +232,59 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/PostCreateRequest"
+                                "$ref": "#/components/schemas/PostUpdateRequest"
                             }
                         }
                     }
                 },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BaseResponse_PostResponse_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/posts/{post_id}/publish": {
+            "patch": {
+                "tags": [
+                    "posts"
+                ],
+                "summary": "Publish a blog post",
+                "description": "Publish a blog post (change status to published)",
+                "operationId": "publish_post_api_v1_posts__post_id__publish_patch",
+                "parameters": [
+                    {
+                        "name": "post_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Post Id"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful Response",
@@ -2372,6 +2420,86 @@
                     "updated_at"
                 ],
                 "title": "PostResponse"
+            },
+            "PostUpdateRequest": {
+                "properties": {
+                    "title": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "maxLength": 255,
+                                "minLength": 1
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Title"
+                    },
+                    "content": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "minLength": 1
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Content"
+                    },
+                    "slug": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Slug"
+                    },
+                    "excerpt": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Excerpt"
+                    },
+                    "tags": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Tags"
+                    },
+                    "category_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Category Id"
+                    }
+                },
+                "type": "object",
+                "title": "PostUpdateRequest",
+                "description": "DTO for partial post updates (PATCH) - all fields are optional"
             },
             "RegisterRequest": {
                 "properties": {

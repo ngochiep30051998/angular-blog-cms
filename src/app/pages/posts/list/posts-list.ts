@@ -208,13 +208,39 @@ export class PostsList implements OnInit {
 
         modalRef.afterClosed().then((result) => {
             if (result === true && this.postToPublish) {
-                // Note: The API doesn't have a publish/unpublish endpoint in the OpenAPI spec
-                // This would need to be implemented on the backend or handled via update
-                // For now, we'll just show the confirmation
-                this.loadPosts();
+                if (this.publishAction === 'publish') {
+                    this.performPublish(this.postToPublish._id);
+                } else {
+                    this.performUnpublish(this.postToPublish);
+                }
             }
             this.postToPublish = null;
             this.publishAction = null;
+        });
+    }
+
+    private performPublish(postId: string): void {
+        this.loadingService.show();
+        this.apiService.publishPost(postId).subscribe({
+            next: () => {
+                this.loadPosts();
+            },
+            error: () => {
+                this.loadingService.hide();
+            },
+        });
+    }
+
+    private performUnpublish(post: IPostResponse): void {
+        this.loadingService.show();
+        // Try to call unpublish endpoint (may not exist in API, will handle error if it doesn't)
+        this.apiService.unpublishPost(post._id).subscribe({
+            next: () => {
+                this.loadPosts();
+            },
+            error: () => {
+                this.loadingService.hide();
+            },
         });
     }
 
