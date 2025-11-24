@@ -423,13 +423,13 @@
                     }
                 ]
             },
-            "put": {
+            "patch": {
                 "tags": [
                     "categories"
                 ],
                 "summary": "Update a category",
-                "description": "Update a category",
-                "operationId": "update_category_api_v1_categories__category_id__put",
+                "description": "Update a category (partial update)",
+                "operationId": "update_category_api_v1_categories__category_id__patch",
                 "parameters": [
                     {
                         "name": "category_id",
@@ -446,7 +446,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/CategoryCreateRequest"
+                                "$ref": "#/components/schemas/CategoryUpdateRequest"
                             }
                         }
                     }
@@ -1602,6 +1602,58 @@
                 ],
                 "title": "CategoryResponse"
             },
+            "CategoryUpdateRequest": {
+                "properties": {
+                    "name": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "maxLength": 100,
+                                "minLength": 1
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Name"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "parent_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Parent Id"
+                    },
+                    "slug": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Slug"
+                    }
+                },
+                "type": "object",
+                "title": "CategoryUpdateRequest"
+            },
             "FileResponse": {
                 "properties": {
                     "_id": {
@@ -1989,7 +2041,8 @@
                     "date_of_birth": {
                         "anyOf": [
                             {
-                                "type": "string"
+                                "type": "string",
+                                "format": "date-time"
                             },
                             {
                                 "type": "null"
