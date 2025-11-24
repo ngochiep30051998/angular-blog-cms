@@ -579,7 +579,7 @@
                     "auth"
                 ],
                 "summary": "User login",
-                "description": "User login",
+                "description": "User login - creates a new session and invalidates any existing session",
                 "operationId": "login_user_api_v1_auth_login_post",
                 "requestBody": {
                     "content": {
@@ -619,6 +619,33 @@
                 }
             }
         },
+        "/api/v1/auth/logout": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "User logout",
+                "description": "User logout - invalidates the current session token",
+                "operationId": "logout_user_api_v1_auth_logout_post",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BaseResponse_dict_"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/users/profile": {
             "get": {
                 "tags": [
@@ -634,6 +661,246 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/BaseResponse_UserResponse_"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "List all users",
+                "description": "List all users\nRequires: Admin role",
+                "operationId": "list_users_api_v1_users_get",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "description": "Page number",
+                            "default": 1,
+                            "title": "Page"
+                        },
+                        "description": "Page number"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1,
+                            "description": "Number of users per page",
+                            "default": 10,
+                            "title": "Page Size"
+                        },
+                        "description": "Number of users per page"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BaseResponse_List_UserResponse__"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/{user_id}": {
+            "patch": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update user",
+                "description": "Update user information\n- Admin can update any user\n- Non-admin can only update themselves",
+                "operationId": "update_user_api_v1_users__user_id__patch",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "User Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BaseResponse_UserResponse_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/{user_id}/lock": {
+            "patch": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Lock or unlock user",
+                "description": "Lock or unlock a user\nRequires: Admin role",
+                "operationId": "lock_user_api_v1_users__user_id__lock_patch",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "User Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserLockRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BaseResponse_UserResponse_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/{user_id}/change-password": {
+            "patch": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Change user password",
+                "description": "Change user password\n- Admin can change any user's password\n- Non-admin can only change their own password\n- Requires old password for verification\n- All existing sessions will be invalidated after password change",
+                "operationId": "change_password_api_v1_users__user_id__change_password_patch",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "User Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChangePasswordRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BaseResponse_dict_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
                                 }
                             }
                         }
@@ -1121,6 +1388,77 @@
                 ],
                 "title": "BaseResponse[List[PostResponse]]"
             },
+            "BaseResponse_List_UserResponse__": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "title": "Success"
+                    },
+                    "message": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Message"
+                    },
+                    "data": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/UserResponse"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Data"
+                    },
+                    "total": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Total"
+                    },
+                    "page": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Page"
+                    },
+                    "page_size": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Page Size"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "success"
+                ],
+                "title": "BaseResponse[List[UserResponse]]"
+            },
             "BaseResponse_LoginResponse_": {
                 "properties": {
                     "success": {
@@ -1457,6 +1795,75 @@
                 ],
                 "title": "BaseResponse[bool]"
             },
+            "BaseResponse_dict_": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "title": "Success"
+                    },
+                    "message": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Message"
+                    },
+                    "data": {
+                        "anyOf": [
+                            {
+                                "additionalProperties": true,
+                                "type": "object"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Data"
+                    },
+                    "total": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Total"
+                    },
+                    "page": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Page"
+                    },
+                    "page_size": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Page Size"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "success"
+                ],
+                "title": "BaseResponse[dict]"
+            },
             "Body_upload_file_api_v1_file_upload_post": {
                 "properties": {
                     "image": {
@@ -1653,6 +2060,24 @@
                 },
                 "type": "object",
                 "title": "CategoryUpdateRequest"
+            },
+            "ChangePasswordRequest": {
+                "properties": {
+                    "old_password": {
+                        "type": "string",
+                        "title": "Old Password"
+                    },
+                    "new_password": {
+                        "type": "string",
+                        "title": "New Password"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "old_password",
+                    "new_password"
+                ],
+                "title": "ChangePasswordRequest"
             },
             "FileResponse": {
                 "properties": {
@@ -2023,6 +2448,19 @@
                 ],
                 "title": "Slug"
             },
+            "UserLockRequest": {
+                "properties": {
+                    "locked": {
+                        "type": "boolean",
+                        "title": "Locked"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "locked"
+                ],
+                "title": "UserLockRequest"
+            },
             "UserResponse": {
                 "properties": {
                     "_id": {
@@ -2063,6 +2501,11 @@
                         "type": "string",
                         "format": "date-time",
                         "title": "Updated At"
+                    },
+                    "locked": {
+                        "type": "boolean",
+                        "title": "Locked",
+                        "default": false
                     }
                 },
                 "type": "object",
@@ -2084,6 +2527,56 @@
                     "guest"
                 ],
                 "title": "UserRole"
+            },
+            "UserUpdateRequest": {
+                "properties": {
+                    "full_name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Full Name"
+                    },
+                    "email": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Email"
+                    },
+                    "date_of_birth": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Date Of Birth"
+                    },
+                    "role": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/UserRole"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    }
+                },
+                "type": "object",
+                "title": "UserUpdateRequest"
             },
             "ValidationError": {
                 "properties": {
