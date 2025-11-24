@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { IBaseResponse } from '../interfaces/base-response';
 import { ILogin, IReqLogin } from '../interfaces/login';
 import { ICategoryCreateRequest, ICategoryResponse } from '../interfaces/category';
-import { IUser } from '../interfaces/user.interface';
+import { IUser, IUserUpdateRequest, IUserLockRequest, IChangePasswordRequest, IRegisterRequest } from '../interfaces/user.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -47,5 +47,32 @@ export class ApiService {
 
     getUserProfile(): Observable<IBaseResponse<IUser>> {
         return this.httpClient.get<IBaseResponse<IUser>>(`${this.apiUrl}/users/profile`);
+    }
+
+    getUsers(page?: number, pageSize?: number): Observable<IBaseResponse<IUser[]>> {
+        let params = new HttpParams();
+        if (page) {
+            params = params.set('page', page.toString());
+        }
+        if (pageSize) {
+            params = params.set('page_size', pageSize.toString());
+        }
+        return this.httpClient.get<IBaseResponse<IUser[]>>(`${this.apiUrl}/users`, { params });
+    }
+
+    updateUser(userId: string, req: IUserUpdateRequest): Observable<IBaseResponse<IUser>> {
+        return this.httpClient.patch<IBaseResponse<IUser>>(`${this.apiUrl}/users/${userId}`, req);
+    }
+
+    lockUser(userId: string, req: IUserLockRequest): Observable<IBaseResponse<IUser>> {
+        return this.httpClient.patch<IBaseResponse<IUser>>(`${this.apiUrl}/users/${userId}/lock`, req);
+    }
+
+    changePassword(userId: string, req: IChangePasswordRequest): Observable<IBaseResponse<Record<string, unknown>>> {
+        return this.httpClient.patch<IBaseResponse<Record<string, unknown>>>(`${this.apiUrl}/users/${userId}/change-password`, req);
+    }
+
+    register(req: IRegisterRequest): Observable<IBaseResponse<ILogin>> {
+        return this.httpClient.post<IBaseResponse<ILogin>>(`${this.apiUrl}/auth/register`, req);
     }
 }

@@ -1,12 +1,14 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { StorageService } from '../../services/storage-service';
 
 interface MenuItem {
     label: string;
     route: string;
     icon: string;
     badge?: number;
+    adminOnly?: boolean;
 }
 
 @Component({
@@ -17,9 +19,16 @@ interface MenuItem {
   standalone: true,
 })
 export class Sidebar {
-    public readonly isCollapsed = signal<boolean>(false);
+    private readonly storageService = inject(StorageService);
 
-    public readonly menuItems: MenuItem[] = [
+    public readonly isCollapsed = signal<boolean>(false);
+    public readonly userProfile = this.storageService.userProfile;
+
+    public readonly isAdmin = computed(() => {
+        return this.userProfile()?.role === 'admin';
+    });
+
+    public readonly allMenuItems: MenuItem[] = [
         {
             label: 'Dashboard',
             route: '/home',
@@ -30,8 +39,24 @@ export class Sidebar {
             route: '/categories',
             icon: './assets/images/svgs/messages.svg',
             badge: 10,
+        },
+        {
+            label: 'Profile',
+            route: '/profile',
+            icon: './assets/images/svgs/documents.svg',
+        },
+        {
+            label: 'Users',
+            route: '/users',
+            icon: './assets/images/svgs/employees.svg',
+            adminOnly: true,
         }
     ];
+
+    public readonly menuItems = computed<MenuItem[]>(() => {
+        const isAdmin = this.isAdmin();
+        return this.allMenuItems.filter(item => !item.adminOnly || isAdmin);
+    });
 
     public toggleCollapse(): void {
         this.isCollapsed.update((value) => !value);

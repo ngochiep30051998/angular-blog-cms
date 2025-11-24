@@ -1,7 +1,7 @@
 <aside [class]="isCollapsed() ? 'w-20' : 'w-64'" class="bg-gray-800 text-white h-full flex flex-col transition-all duration-300">
     <nav class="p-4 flex-1 overflow-y-auto">
         <ul class="space-y-1">
-            @for (item of menuItems; track item.route) {
+            @for (item of menuItems(); track item.route) {
                 <li>
                     <a
                         [routerLink]="item.route"

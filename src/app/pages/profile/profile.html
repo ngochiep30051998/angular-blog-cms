@@ -1,0 +1,70 @@
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-lg font-bold text-gray-800">My Profile</h1>
+            <p class="text-sm text-gray-500">View and manage your profile information</p>
+        </div>
+        <div class="flex gap-3">
+            <a
+                routerLink="/profile/edit"
+                class="text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-xl text-sm px-4 py-2.5 text-center transition-all duration-200"
+            >
+                Edit Profile
+            </a>
+            <a
+                routerLink="/profile/change-password"
+                class="text-white bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-xl text-sm px-4 py-2.5 text-center transition-all duration-200"
+            >
+                Change Password
+            </a>
+        </div>
+    </div>
+
+    @if (user()) {
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="px-6 py-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-500 mb-1">Full Name</label>
+                        <p class="text-sm text-gray-900">{{ user()?.full_name }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-500 mb-1">Email</label>
+                        <p class="text-sm text-gray-900">{{ user()?.email }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-500 mb-1">Role</label>
+                        <p class="text-sm text-gray-900 capitalize">{{ user()?.role }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-500 mb-1">Date of Birth</label>
+                        <p class="text-sm text-gray-900">{{ formatDate(user()?.date_of_birth ?? null) }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-500 mb-1">Account Status</label>
+                        <p class="text-sm">
+                            @if (user()?.locked) {
+                                <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">Locked</span>
+                            } @else {
+                                <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">Active</span>
+                            }
+                        </p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-500 mb-1">Created At</label>
+                        <p class="text-sm text-gray-900">{{ user()?.created_at | date: 'short' }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-500 mb-1">Updated At</label>
+                        <p class="text-sm text-gray-900">{{ user()?.updated_at | date: 'short' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    } @else {
+        <div class="bg-white rounded-lg shadow-md p-8 text-center">
+            <p class="text-sm text-gray-500">No profile information available.</p>
+        </div>
+    }
+</div>
+
