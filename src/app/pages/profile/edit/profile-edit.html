@@ -17,7 +17,7 @@
                         type="text"
                         id="full_name"
                         formControlName="full_name"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                        class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                         [class.border-red-500]="fullName?.invalid && fullName?.touched"
                     />
                     @if (fullName?.invalid && fullName?.touched) {
@@ -33,7 +33,7 @@
                         type="email"
                         id="email"
                         formControlName="email"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                        class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                         [class.border-red-500]="email?.invalid && email?.touched"
                     />
                     @if (email?.invalid && email?.touched) {
@@ -55,7 +55,7 @@
                         type="date"
                         id="date_of_birth"
                         formControlName="date_of_birth"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                        class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                     />
                 </div>
             </div>
@@ -63,7 +63,7 @@
             <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
                 <a
                     routerLink="/profile"
-                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                    class="px-4 py-3 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
                 >
                     Cancel
                 </a>

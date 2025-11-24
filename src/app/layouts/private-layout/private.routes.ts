@@ -80,6 +80,29 @@ export const privateRoutes: Routes = [
                 ],
                 canActivate: [adminGuard],
             },
+            {
+                path: 'posts',
+                children: [
+                    {
+                        path: '',
+                        loadComponent: () =>
+                            import('../../pages/posts/list/posts-list').then(
+                                (m) => m.PostsList),
+                    },
+                    {
+                        path: 'create',
+                        loadComponent: () =>
+                            import('../../pages/posts/create/post-create').then(
+                                (m) => m.PostCreate),
+                    },
+                    {
+                        path: ':postId/edit',
+                        loadComponent: () =>
+                            import('../../pages/posts/edit/post-edit').then(
+                                (m) => m.PostEdit),
+                    },
+                ],
+            },
         ],
         canActivate: [authGuard]
     }

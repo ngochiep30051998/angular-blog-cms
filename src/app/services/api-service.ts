@@ -6,6 +6,7 @@ import { IBaseResponse } from '../interfaces/base-response';
 import { ILogin, IReqLogin } from '../interfaces/login';
 import { ICategoryCreateRequest, ICategoryResponse } from '../interfaces/category';
 import { IUser, IUserUpdateRequest, IUserLockRequest, IChangePasswordRequest, IRegisterRequest } from '../interfaces/user.interface';
+import { IPostCreateRequest, IPostResponse } from '../interfaces/post';
 
 @Injectable({
     providedIn: 'root',
@@ -74,5 +75,32 @@ export class ApiService {
 
     register(req: IRegisterRequest): Observable<IBaseResponse<ILogin>> {
         return this.httpClient.post<IBaseResponse<ILogin>>(`${this.apiUrl}/auth/register`, req);
+    }
+
+    getPosts(page?: number, pageSize?: number): Observable<IBaseResponse<IPostResponse[]>> {
+        let params = new HttpParams();
+        if (page) {
+            params = params.set('page', page.toString());
+        }
+        if (pageSize) {
+            params = params.set('page_size', pageSize.toString());
+        }
+        return this.httpClient.get<IBaseResponse<IPostResponse[]>>(`${this.apiUrl}/posts`, { params });
+    }
+
+    getPostById(postId: string): Observable<IBaseResponse<IPostResponse>> {
+        return this.httpClient.get<IBaseResponse<IPostResponse>>(`${this.apiUrl}/posts/${postId}`);
+    }
+
+    createPost(req: IPostCreateRequest): Observable<IBaseResponse<IPostResponse>> {
+        return this.httpClient.post<IBaseResponse<IPostResponse>>(`${this.apiUrl}/posts`, req);
+    }
+
+    updatePost(postId: string, req: IPostCreateRequest): Observable<IBaseResponse<IPostResponse>> {
+        return this.httpClient.patch<IBaseResponse<IPostResponse>>(`${this.apiUrl}/posts/${postId}`, req);
+    }
+
+    deletePost(postId: string): Observable<IBaseResponse<boolean>> {
+        return this.httpClient.delete<IBaseResponse<boolean>>(`${this.apiUrl}/posts/${postId}`);
     }
 }

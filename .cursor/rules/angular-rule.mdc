@@ -45,4 +45,4 @@ alwaysApply: true
 - Use tailwind css
 - Button Gradient duotone style, size medium
 - default font-size as text-sm 
-- default input styles as px-3 py-2
+- default input styles as px-3 py-3

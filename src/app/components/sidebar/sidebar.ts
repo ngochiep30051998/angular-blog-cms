@@ -35,10 +35,14 @@ export class Sidebar {
             icon: './assets/images/svgs/dashboard.svg',
         },
         {
+            label: 'Posts',
+            route: '/posts',
+            icon: './assets/images/svgs/jobs.svg',
+        },
+        {
             label: 'Categories',
             route: '/categories',
             icon: './assets/images/svgs/messages.svg',
-            badge: 10,
         },
         {
             label: 'Profile',
