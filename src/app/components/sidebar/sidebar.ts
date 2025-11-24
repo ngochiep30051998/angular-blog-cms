@@ -45,11 +45,6 @@ export class Sidebar {
             icon: './assets/images/svgs/messages.svg',
         },
         {
-            label: 'Profile',
-            route: '/profile',
-            icon: './assets/images/svgs/documents.svg',
-        },
-        {
             label: 'Users',
             route: '/users',
             icon: './assets/images/svgs/employees.svg',
