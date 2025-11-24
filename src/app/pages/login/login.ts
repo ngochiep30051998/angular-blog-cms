@@ -5,6 +5,8 @@ import { ApiService } from '../../services/api-service';
 import { StorageService } from '../../services/storage-service';
 import { Router } from '@angular/router';
 import { LoadingService } from '../../services/loading-service';
+import { ModalService } from '../../services/modal-service';
+import { ErrorModalComponent } from '../../components/modal/error-modal/error-modal';
 
 @Component({
     selector: 'app-login',
@@ -18,6 +20,7 @@ export class Login {
     private storageService = inject(StorageService)
     private router = inject(Router)
     private loadingService = inject(LoadingService)
+    private modalService = inject(ModalService)
     form: FormGroup;
 
     constructor(private readonly formBuilder: FormBuilder) {
@@ -47,14 +50,23 @@ export class Login {
         this.apiService.login(this.form.value).subscribe({
             next: (res) => {
                 console.log(res.data)
-                const { access_token } = res.data;
-                this.storageService.token = access_token;
-                this.router.navigate(['/home'])
+                const { data, success } = res;
                 this.loadingService.hide()
+                if(success){
+                    const { access_token } = data;
+                    this.storageService.token = access_token;
+                    this.router.navigate(['/home'])
+                } else {
+                    // this.modalService.error(message)
+                }
+                
             },
             error: (err) => {
                 this.loadingService.hide()
                 console.log(err)
+                if(err.status === 401){
+                    this.modalService.openError(err?.error?.detail)
+                }
             }
         })
     }

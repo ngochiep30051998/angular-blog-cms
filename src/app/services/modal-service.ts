@@ -1,6 +1,9 @@
 import { Injectable, TemplateRef, Type } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IModalConfig, IModalRef } from '../interfaces/modal-config';
+import { SuccessModalComponent } from '../components/modal/success-modal/success-modal';
+import { ErrorModalComponent } from '../components/modal/error-modal/error-modal';
+import { WarningModalComponent } from '../components/modal/warning-modal/warning-modal';
 
 @Injectable({
     providedIn: 'root',
@@ -31,6 +34,33 @@ export class ModalService {
             close: (result?: T) => this.close(result),
             afterClosed: () => this.afterClosed<T>(),
         };
+    }
+
+    public openSuccess(message?: string): IModalRef<boolean> {
+        return this.open<boolean>(SuccessModalComponent, {
+            data: message ? { message } : undefined,
+            width: '450px',
+            showCloseButton: false,
+            closeOnBackdropClick: false,
+        });
+    }
+
+    public openError(message?: string): IModalRef<boolean> {
+        return this.open<boolean>(ErrorModalComponent, {
+            data: message ? { message } : undefined,
+            width: '450px',
+            showCloseButton: false,
+            closeOnBackdropClick: false,
+        });
+    }
+
+    public openWarning(message?: string): IModalRef<boolean> {
+        return this.open<boolean>(WarningModalComponent, {
+            data: message ? { message } : undefined,
+            width: '450px',
+            showCloseButton: false,
+            closeOnBackdropClick: false,
+        });
     }
 
     public close(result?: unknown): void {
