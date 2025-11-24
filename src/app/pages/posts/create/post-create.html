@@ -22,7 +22,7 @@
                 type="text"
                 formControlName="title"
                 (blur)="generateSlug()"
-                class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-sm"
+                class="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-sm"
                 [class.border-red-500]="title?.touched && title?.invalid"
                 placeholder="Enter post title"
             />
@@ -43,7 +43,7 @@
                     id="slug"
                     type="text"
                     formControlName="slug"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-sm"
+                    class="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-sm"
                     [class.border-red-500]="slug?.touched && slug?.invalid"
                     placeholder="post-slug-url"
                 />
