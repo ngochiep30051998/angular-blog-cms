@@ -129,14 +129,14 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex flex-wrap gap-1">
-                                    @for (tag of post.tags?.slice(0, 3) || []; track tag) {
+                                    @for (tag of post?.tags?.slice(0, 3) || []; track tag) {
                                         <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
                                             {{ tag }}
                                         </span>
                                     }
-                                    @if ((post.tags?.length || 0) > 3) {
+                                    @if ((post?.tags?.length || 0) > 3) {
                                         <span class="px-2 py-1 text-gray-500 text-xs">
-                                            +{{ (post.tags?.length || 0) - 3 }}
+                                            +{{ (post?.tags?.length || 0) - 3 }}
                                         </span>
                                     }
                                 </div>
