@@ -86,6 +86,13 @@ export class PostsList implements OnInit {
         return Array.from(tagSet).sort();
     });
 
+    protected readonly statusOptions: SelectOption[] = [
+        { id: '', label: 'All Statuses' },
+        { id: 'published', label: 'Published' },
+        { id: 'draft', label: 'Draft' },
+        { id: 'archived', label: 'Archived' },
+    ];
+
     public ngOnInit(): void {
         this.loadCategories();
         this.loadPosts();
