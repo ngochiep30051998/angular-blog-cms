@@ -35,7 +35,7 @@
                     title="User Menu"
                 >
                     <img src="/assets/images/svgs/user.svg" alt="User Menu" class="w-3 h-3" />
-                    <span class="hidden md:inline">Sign In</span>
+                    <span class="hidden md:inline">{{ userProfile()?.full_name || 'User' }}</span>
                 </button>
 
                 <!-- Notifications -->
@@ -64,10 +64,7 @@
         <div
             class="absolute right-6 top-full mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
         >
-            <div class="px-4 py-3 border-b border-gray-100">
-                <p class="text-sm font-semibold text-[#2D3748]">{{ userProfile()?.full_name || 'User' }}</p>
-                <p class="text-xs text-[#A0AEC0] truncate">{{ userProfile()?.email || '' }}</p>
-            </div>
+
             <button
                 type="button"
                 (click)="navigateToProfile()"
