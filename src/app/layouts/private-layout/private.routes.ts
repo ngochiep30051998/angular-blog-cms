@@ -117,19 +117,19 @@ export const privateRoutes: Routes = [
                     {
                         path: '',
                         loadComponent: () =>
-                            import('../../pages/tags/tags-list').then(
+                            import('../../pages/tags/list/tags-list').then(
                                 (m) => m.TagsList),
                     },
                     {
                         path: 'create',
                         loadComponent: () =>
-                            import('../../pages/tags/tag-create').then(
+                            import('../../pages/tags/create/tag-create').then(
                                 (m) => m.TagCreate),
                     },
                     {
                         path: ':tagId/edit',
                         loadComponent: () =>
-                            import('../../pages/tags/tag-edit').then(
+                            import('../../pages/tags/edit/tag-edit').then(
                                 (m) => m.TagEdit),
                     },
                 ],

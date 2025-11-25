@@ -2,9 +2,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { ApiService } from '../../services/api-service';
-import { LoadingService } from '../../services/loading-service';
-import { ITagUpdateRequest } from '../../interfaces/tag';
+import { ApiService } from '../../../services/api-service';
+import { LoadingService } from '../../../services/loading-service';
+import { ITagUpdateRequest } from '../../../interfaces/tag';
 
 @Component({
     selector: 'app-tag-edit',

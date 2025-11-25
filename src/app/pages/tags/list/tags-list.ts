@@ -1,10 +1,10 @@
 import { Component, OnInit, inject, signal, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ApiService } from '../../services/api-service';
-import { LoadingService } from '../../services/loading-service';
-import { ModalService } from '../../services/modal-service';
-import { ITagResponse } from '../../interfaces/tag';
+import { ApiService } from '../../../services/api-service';
+import { LoadingService } from '../../../services/loading-service';
+import { ModalService } from '../../../services/modal-service';
+import { ITagResponse } from '../../../interfaces/tag';
 
 @Component({
     selector: 'app-tags-list',
