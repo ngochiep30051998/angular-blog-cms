@@ -6,7 +6,9 @@ import { IBaseResponse } from '../interfaces/base-response';
 import { ILogin, IReqLogin } from '../interfaces/login';
 import { ICategoryCreateRequest, ICategoryResponse } from '../interfaces/category';
 import { IUser, IUserUpdateRequest, IUserLockRequest, IChangePasswordRequest, IRegisterRequest } from '../interfaces/user.interface';
-import { IPostCreateRequest, IPostResponse } from '../interfaces/post';
+import { IPostCreateRequest, IPostUpdateRequest, IPostResponse } from '../interfaces/post';
+import { IFileResponse } from '../interfaces/file';
+import { ITagResponse, ITagCreateRequest, ITagUpdateRequest } from '../interfaces/tag';
 
 @Injectable({
     providedIn: 'root',
@@ -99,7 +101,7 @@ export class ApiService {
         return this.httpClient.post<IBaseResponse<IPostResponse>>(`${this.apiUrl}/posts`, req);
     }
 
-    updatePost(postId: string, req: IPostCreateRequest): Observable<IBaseResponse<IPostResponse>> {
+    updatePost(postId: string, req: IPostUpdateRequest): Observable<IBaseResponse<IPostResponse>> {
         return this.httpClient.patch<IBaseResponse<IPostResponse>>(`${this.apiUrl}/posts/${postId}`, req);
     }
 
@@ -113,5 +115,53 @@ export class ApiService {
 
     unpublishPost(postId: string): Observable<IBaseResponse<IPostResponse>> {
         return this.httpClient.patch<IBaseResponse<IPostResponse>>(`${this.apiUrl}/posts/${postId}/unpublish`, {});
+    }
+
+    getFiles(page?: number, pageSize?: number): Observable<IBaseResponse<IFileResponse[]>> {
+        let params = new HttpParams();
+        if (page) {
+            params = params.set('page', page.toString());
+        }
+        if (pageSize) {
+            params = params.set('page_size', pageSize.toString());
+        }
+        return this.httpClient.get<IBaseResponse<IFileResponse[]>>(`${this.apiUrl}/file/list`, { params });
+    }
+
+    uploadFile(file: File): Observable<IBaseResponse<Record<string, unknown>>> {
+        const formData = new FormData();
+        formData.append('image', file);
+        return this.httpClient.post<IBaseResponse<Record<string, unknown>>>(`${this.apiUrl}/file/upload`, formData);
+    }
+
+    deleteFile(fileId: string): Observable<IBaseResponse<Record<string, unknown>>> {
+        return this.httpClient.delete<IBaseResponse<Record<string, unknown>>>(`${this.apiUrl}/file/delete/${fileId}`);
+    }
+
+    getTags(page?: number, pageSize?: number): Observable<IBaseResponse<ITagResponse[]>> {
+        let params = new HttpParams();
+        if (page) {
+            params = params.set('page', page.toString());
+        }
+        if (pageSize) {
+            params = params.set('page_size', pageSize.toString());
+        }
+        return this.httpClient.get<IBaseResponse<ITagResponse[]>>(`${this.apiUrl}/tags`, { params });
+    }
+
+    getTagById(tagId: string): Observable<IBaseResponse<ITagResponse>> {
+        return this.httpClient.get<IBaseResponse<ITagResponse>>(`${this.apiUrl}/tags/${tagId}`);
+    }
+
+    createTag(req: ITagCreateRequest): Observable<IBaseResponse<ITagResponse>> {
+        return this.httpClient.post<IBaseResponse<ITagResponse>>(`${this.apiUrl}/tags`, req);
+    }
+
+    updateTag(tagId: string, req: ITagUpdateRequest): Observable<IBaseResponse<ITagResponse>> {
+        return this.httpClient.patch<IBaseResponse<ITagResponse>>(`${this.apiUrl}/tags/${tagId}`, req);
+    }
+
+    deleteTag(tagId: string): Observable<IBaseResponse<boolean>> {
+        return this.httpClient.delete<IBaseResponse<boolean>>(`${this.apiUrl}/tags/${tagId}`);
     }
 }

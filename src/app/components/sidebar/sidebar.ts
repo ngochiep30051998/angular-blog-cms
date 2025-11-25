@@ -9,6 +9,7 @@ interface MenuItem {
     icon: string;
     badge?: number;
     adminOnly?: boolean;
+    writerOnly?: boolean;
 }
 
 @Component({
@@ -29,6 +30,11 @@ export class Sidebar {
         return this.userProfile()?.role === 'admin';
     });
 
+    public readonly isWriter = computed(() => {
+        const role = this.userProfile()?.role;
+        return role === 'admin' || role === 'writer';
+    });
+
     public readonly allMenuItems: MenuItem[] = [
         {
             label: 'Dashboard',
@@ -46,16 +52,36 @@ export class Sidebar {
             icon: './assets/images/svgs/messages.svg',
         },
         {
+            label: 'Tags',
+            route: '/tags',
+            icon: './assets/images/svgs/messages.svg',
+        },
+        {
             label: 'Users',
             route: '/users',
             icon: './assets/images/svgs/employees.svg',
             adminOnly: true,
+        },
+        {
+            label: 'Files',
+            route: '/files',
+            icon: './assets/images/svgs/documents.svg',
+            writerOnly: true,
         }
     ];
 
     public readonly menuItems = computed<MenuItem[]>(() => {
         const isAdmin = this.isAdmin();
-        return this.allMenuItems.filter(item => !item.adminOnly || isAdmin);
+        const isWriter = this.isWriter();
+        return this.allMenuItems.filter(item => {
+            if (item.adminOnly && !isAdmin) {
+                return false;
+            }
+            if (item.writerOnly && !isWriter) {
+                return false;
+            }
+            return true;
+        });
     });
 
     public toggleCollapse(): void {

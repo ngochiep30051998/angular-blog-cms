@@ -1,4 +1,4 @@
-<div class="max-w-4xl mx-auto space-y-6">
+<div class="mx-auto space-y-6">
     <div class="flex items-center justify-between">
         <div>
             <h1 class="text-sm font-bold text-gray-800">Create Post</h1>
@@ -12,95 +12,230 @@
         </a>
     </div>
 
-    <form [formGroup]="form" (ngSubmit)="submit()" class="bg-white rounded-2xl shadow-md border border-gray-100 p-8 space-y-5">
-        <div>
-            <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">
-                Title <span class="text-red-500">*</span>
-            </label>
-            <input
-                id="title"
-                type="text"
-                formControlName="title"
-                (blur)="generateSlug()"
-                class="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-sm"
-                [class.border-red-500]="title?.touched && title?.invalid"
-                placeholder="Enter post title"
-            />
-            @if (title?.touched && title?.errors?.['required']) {
-                <p class="mt-2 text-sm text-red-600">Title is required.</p>
-            }
-            @if (title?.touched && title?.errors?.['maxlength']) {
-                <p class="mt-2 text-sm text-red-600">Title must be less than 255 characters.</p>
-            }
-        </div>
+    <form [formGroup]="form" (ngSubmit)="submit()" class="bg-white rounded-2xl shadow-md border border-gray-100 p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: Title, Slug, Content, Excerpt -->
+            <div class="lg:col-span-2 space-y-5">
+                <div>
+                    <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Title <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                        id="title"
+                        type="text"
+                        formControlName="title"
+                        (blur)="generateSlug()"
+                        class="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-sm"
+                        [class.border-red-500]="title?.touched && title?.invalid"
+                        placeholder="Enter post title"
+                    />
+                    @if (title?.touched && title?.errors?.['required']) {
+                        <p class="mt-2 text-sm text-red-600">Title is required.</p>
+                    }
+                    @if (title?.touched && title?.errors?.['maxlength']) {
+                        <p class="mt-2 text-sm text-red-600">Title must be less than 255 characters.</p>
+                    }
+                </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label for="slug" class="block text-sm font-semibold text-gray-700 mb-2">
-                    Slug <span class="text-red-500">*</span>
-                </label>
-                <input
-                    id="slug"
-                    type="text"
-                    formControlName="slug"
-                    class="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-sm"
-                    [class.border-red-500]="slug?.touched && slug?.invalid"
-                    placeholder="post-slug-url"
-                />
-                @if (slug?.touched && slug?.errors?.['required']) {
-                    <p class="mt-2 text-sm text-red-600">Slug is required.</p>
-                }
-                @if (slug?.touched && slug?.errors?.['pattern']) {
-                    <p class="mt-2 text-sm text-red-600">Slug must be lowercase with hyphens (e.g., my-post-title).</p>
-                }
+                <div>
+                    <label for="slug" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Slug <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                        id="slug"
+                        type="text"
+                        formControlName="slug"
+                        class="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-sm"
+                        [class.border-red-500]="slug?.touched && slug?.invalid"
+                        placeholder="post-slug-url"
+                    />
+                    @if (slug?.touched && slug?.errors?.['required']) {
+                        <p class="mt-2 text-sm text-red-600">Slug is required.</p>
+                    }
+                    @if (slug?.touched && slug?.errors?.['pattern']) {
+                        <p class="mt-2 text-sm text-red-600">Slug must be lowercase with hyphens (e.g., my-post-title).</p>
+                    }
+                </div>
+
+                <div>
+                    <label for="content" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Content <span class="text-red-500">*</span>
+                    </label>
+                    <editor
+                        id="content"
+                        formControlName="content"
+                        [init]="editorConfig"
+                    ></editor>
+                    @if (content?.touched && content?.errors?.['required']) {
+                        <p class="mt-2 text-sm text-red-600">Content is required.</p>
+                    }
+                    <app-file-picker
+                        #filePicker
+                        mode="insert"
+                        (fileSelected)="onFileSelected($event)"
+                    ></app-file-picker>
+                </div>
+
+                <div>
+                    <label for="excerpt" class="block text-sm font-semibold text-gray-700 mb-2">Excerpt</label>
+                    <textarea
+                        id="excerpt"
+                        formControlName="excerpt"
+                        rows="3"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none text-sm"
+                        placeholder="Brief description of the post (optional)"
+                    ></textarea>
+                </div>
             </div>
-            <div>
-                <label for="category_id" class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
-                <app-custom-select
-                    formControlName="category_id"
-                    [options]="categoryOptions()"
-                    [placeholder]="'Select a category'"
-                    [valueKey]="'_id'"
-                    [displayKey]="'name'"
-                    [showAvatar]="true"
-                ></app-custom-select>
+
+            <!-- Right Column: Category, Status, Tags, Thumbnail, Banner -->
+            <div class="space-y-5">
+                <div>
+                    <label for="category_id" class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+                    <app-custom-select
+                        formControlName="category_id"
+                        [options]="categoryOptions()"
+                        [placeholder]="'Select a category'"
+                        [valueKey]="'_id'"
+                        [displayKey]="'name'"
+                        [showAvatar]="true"
+                    ></app-custom-select>
+                </div>
+
+                <div>
+                    <label for="status" class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+                    <app-custom-select
+                        formControlName="status"
+                        [options]="statusOptions"
+                        [placeholder]="'Select status'"
+                        [valueKey]="'id'"
+                        [displayKey]="'label'"
+                        [showAvatar]="false"
+                    ></app-custom-select>
+                </div>
+
+                <div>
+                    <label for="tags" class="block text-sm font-semibold text-gray-700 mb-2">Tags</label>
+                    <app-tags-input
+                        formControlName="tags"
+                        [existingTags]="tagNames()"
+                        placeholder="Add tags (press Enter)"
+                    ></app-tags-input>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Thumbnail</label>
+                    @if (selectedThumbnail()) {
+                        <div class="relative group">
+                            <div class="w-full h-48 rounded-xl border border-gray-300 overflow-hidden bg-gray-100">
+                                <img
+                                    [src]="selectedThumbnail()!.cloudinary_url || ''"
+                                    [alt]="selectedThumbnail()!.name || 'Thumbnail'"
+                                    class="w-full h-full object-cover"
+                                    onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\'%3E%3Crect fill=\'%23e5e7eb\' width=\'400\' height=\'200\'/%3E%3Ctext fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'14\' x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\'%3EImage not found%3C/text%3E%3C/svg%3E'"
+                                />
+                            </div>
+                            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-200 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                <div class="flex gap-2">
+                                    <button
+                                        type="button"
+                                        (click)="openThumbnailPicker()"
+                                        class="px-3 py-1.5 text-xs font-medium text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors"
+                                    >
+                                        Change
+                                    </button>
+                                    <button
+                                        type="button"
+                                        (click)="removeThumbnail()"
+                                        class="px-3 py-1.5 text-xs font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <p class="text-xs text-gray-600 truncate" [title]="selectedThumbnail()!.name || 'Thumbnail'">
+                                    {{ selectedThumbnail()!.name || 'Thumbnail' }}
+                                </p>
+                            </div>
+                        </div>
+                    } @else {
+                        <button
+                            type="button"
+                            (click)="openThumbnailPicker()"
+                            class="w-full h-48 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center hover:border-blue-500 transition-colors bg-gray-50"
+                        >
+                            <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            <span class="text-sm text-gray-600">Select Thumbnail</span>
+                        </button>
+                    }
+                    <app-file-picker
+                        #thumbnailPicker
+                        mode="select"
+                        (fileSelected)="onThumbnailSelected($event)"
+                    ></app-file-picker>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Banner</label>
+                    @if (selectedBanner()) {
+                        <div class="relative group">
+                            <div class="w-full h-48 rounded-xl border border-gray-300 overflow-hidden bg-gray-100">
+                                <img
+                                    [src]="selectedBanner()!.cloudinary_url || ''"
+                                    [alt]="selectedBanner()!.name || 'Banner'"
+                                    class="w-full h-full object-cover"
+                                    onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\'%3E%3Crect fill=\'%23e5e7eb\' width=\'400\' height=\'200\'/%3E%3Ctext fill=\'%239ca3af\' font-family=\'sans-serif\' font-size=\'14\' x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\'%3EImage not found%3C/text%3E%3C/svg%3E'"
+                                />
+                            </div>
+                            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-200 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                <div class="flex gap-2">
+                                    <button
+                                        type="button"
+                                        (click)="openBannerPicker()"
+                                        class="px-3 py-1.5 text-xs font-medium text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors"
+                                    >
+                                        Change
+                                    </button>
+                                    <button
+                                        type="button"
+                                        (click)="removeBanner()"
+                                        class="px-3 py-1.5 text-xs font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <p class="text-xs text-gray-600 truncate" [title]="selectedBanner()!.name || 'Banner'">
+                                    {{ selectedBanner()!.name || 'Banner' }}
+                                </p>
+                            </div>
+                        </div>
+                    } @else {
+                        <button
+                            type="button"
+                            (click)="openBannerPicker()"
+                            class="w-full h-48 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center hover:border-blue-500 transition-colors bg-gray-50"
+                        >
+                            <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            <span class="text-sm text-gray-600">Select Banner</span>
+                        </button>
+                    }
+                    <app-file-picker
+                        #bannerPicker
+                        mode="select"
+                        (fileSelected)="onBannerSelected($event)"
+                    ></app-file-picker>
+                </div>
             </div>
         </div>
 
-        <div>
-            <label for="excerpt" class="block text-sm font-semibold text-gray-700 mb-2">Excerpt</label>
-            <textarea
-                id="excerpt"
-                formControlName="excerpt"
-                rows="3"
-                class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none text-sm"
-                placeholder="Brief description of the post (optional)"
-            ></textarea>
-        </div>
-
-        <div>
-            <label for="tags" class="block text-sm font-semibold text-gray-700 mb-2">Tags</label>
-            <app-tags-input
-                formControlName="tags"
-                [existingTags]="allTags()"
-                placeholder="Add tags (press Enter)"
-            ></app-tags-input>
-        </div>
-
-        <div>
-            <label for="content" class="block text-sm font-semibold text-gray-700 mb-2">
-                Content <span class="text-red-500">*</span>
-            </label>
-            <editor
-                formControlName="content"
-                [init]="editorConfig"
-            ></editor>
-            @if (content?.touched && content?.errors?.['required']) {
-                <p class="mt-2 text-sm text-red-600">Content is required.</p>
-            }
-        </div>
-
-        <div class="flex gap-3 pt-4">
+        <div class="flex gap-3 pt-6 mt-6 border-t border-gray-200">
             <button
                 type="submit"
                 [disabled]="form.invalid"

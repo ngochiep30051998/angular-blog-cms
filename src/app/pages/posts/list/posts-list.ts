@@ -80,7 +80,7 @@ export class PostsList implements OnInit {
         const tagSet = new Set<string>();
         this.posts().forEach((post) => {
             if (post.tags && Array.isArray(post.tags)) {
-                post.tags.forEach((tag) => tagSet.add(tag));
+                post.tags.forEach((tag) => tagSet.add(tag.name));
             }
         });
         return Array.from(tagSet).sort();
@@ -134,7 +134,7 @@ export class PostsList implements OnInit {
                     if (filters.tag) {
                         filteredPosts = filteredPosts.filter((post) => 
                             post.tags && post.tags.some((tag) => 
-                                tag.toLowerCase().includes(filters.tag.toLowerCase())
+                                tag.name.toLowerCase().includes(filters.tag.toLowerCase())
                             )
                         );
                     }

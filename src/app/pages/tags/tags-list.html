@@ -1,0 +1,121 @@
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-lg font-bold text-[#2D3748]">Tags</h1>
+            <p class="text-sm text-[#A0AEC0]">Manage your blog tags</p>
+        </div>
+        <a
+            routerLink="/tags/create"
+            class="text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 font-medium rounded-lg text-sm px-4 py-2.5 text-center transition-all duration-200"
+        >
+            + New Tag
+        </a>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-[0px_3.5px_5.5px_0px_rgba(0,0,0,0.02)] overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-[#F7FAFC] border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
+                            Name
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
+                            Slug
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
+                            Description
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
+                            Usage Count
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
+                            Created At
+                        </th>
+                        <th class="px-6 py-3 text-right text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @if (tags().length === 0) {
+                        <tr>
+                            <td colspan="6" class="px-6 py-8 text-center text-[#A0AEC0] text-sm">
+                                No tags found. Create a new one to get started.
+                            </td>
+                        </tr>
+                    }
+                    @for (tag of tags(); track tag._id) {
+                        <tr class="hover:bg-[#F7FAFC] transition-colors duration-200">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-bold text-[#2D3748]">
+                                    {{ tag.name }}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-[#A0AEC0]">{{ getSlugValue(tag) }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-sm text-[#A0AEC0] max-w-xs truncate">
+                                    {{ tag.description || '-' }}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-[#A0AEC0]">
+                                    {{ tag.usage_count || 0 }}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-[#A0AEC0]">
+                                    {{ tag.created_at | date: 'short' }}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <div class="flex items-center justify-end gap-3">
+                                    <a
+                                        [routerLink]="['/tags', tag._id, 'edit']"
+                                        class="px-4 py-2 text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 font-medium rounded-lg text-sm text-center transition-all duration-200"
+                                    >
+                                        Edit
+                                    </a>
+                                    <button
+                                        type="button"
+                                        (click)="deleteTag(tag._id)"
+                                        class="px-4 py-2 bg-gradient-to-r from-red-500 to-pink-600 text-white rounded-lg hover:from-red-600 hover:to-pink-700 transition-all duration-200 font-medium text-sm"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<ng-template #deleteConfirmTemplate>
+    <div class="space-y-4">
+        <p class="text-sm text-gray-700">
+            Are you sure you want to delete this tag? This action cannot be undone.
+        </p>
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
+            <button
+                type="button"
+                (click)="cancelDelete()"
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+            >
+                Cancel
+            </button>
+            <button
+                type="button"
+                (click)="confirmDelete()"
+                class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 rounded-lg transition-all duration-200"
+            >
+                Delete
+            </button>
+        </div>
+    </div>
+</ng-template>
+

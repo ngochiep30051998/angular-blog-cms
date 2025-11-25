@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -7,13 +7,16 @@ import { ApiService } from '../../../services/api-service';
 import { LoadingService } from '../../../services/loading-service';
 import { ICategoryResponse } from '../../../interfaces/category';
 import { IPostCreateRequest } from '../../../interfaces/post';
+import { ITagResponse, ITagInput } from '../../../interfaces/tag';
 import { CustomSelect, SelectOption } from '../../../components/custom-select/custom-select';
 import { TagsInput } from '../../../components/tags-input/tags-input';
+import { FilePicker } from '../../../components/file-picker/file-picker';
+import { IFileResponse } from '../../../interfaces/file';
 
 @Component({
     selector: 'app-post-create',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, RouterModule, EditorModule, CustomSelect, TagsInput],
+    imports: [CommonModule, ReactiveFormsModule, RouterModule, EditorModule, CustomSelect, TagsInput, FilePicker],
     providers: [
         { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
     ],
@@ -27,7 +30,11 @@ export class PostCreate implements OnInit {
     private readonly router = inject(Router);
 
     protected readonly categories = signal<ICategoryResponse[]>([]);
-    protected readonly allTags = signal<string[]>([]);
+    protected readonly allTags = signal<ITagResponse[]>([]);
+    
+    protected readonly tagNames = computed<string[]>(() => {
+        return this.allTags().map((tag) => tag.name).sort();
+    });
 
     protected readonly categoryOptions = computed<SelectOption[]>(() => {
         const options: SelectOption[] = [];
@@ -59,7 +66,21 @@ export class PostCreate implements OnInit {
         excerpt: [''],
         tags: [[]],
         category_id: [''],
+        thumbnail: [''],
+        banner: [''],
+        status: ['draft'],
     });
+
+    protected readonly statusOptions: SelectOption[] = [
+        { id: 'draft', label: 'Draft' },
+        { id: 'published', label: 'Published' },
+    ];
+
+    @ViewChild('filePicker') filePickerRef!: FilePicker;
+    @ViewChild('thumbnailPicker') thumbnailPickerRef!: FilePicker;
+    @ViewChild('bannerPicker') bannerPickerRef!: FilePicker;
+    protected selectedThumbnail = signal<IFileResponse | null>(null);
+    protected selectedBanner = signal<IFileResponse | null>(null);
 
     protected readonly editorConfig = {
         height: 500,
@@ -72,13 +93,22 @@ export class PostCreate implements OnInit {
         toolbar: 'undo redo | blocks | ' +
             'bold italic forecolor | alignleft aligncenter ' +
             'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | help',
+            'insertfile | removeformat | help',
         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+        setup: (editor: any) => {
+            editor.ui.registry.addButton('insertfile', {
+                text: 'Insert File',
+                tooltip: 'Insert file from gallery',
+                onAction: () => {
+                    this.openFilePicker();
+                }
+            });
+        },
     };
 
     public ngOnInit(): void {
         this.loadCategories();
-        this.loadAllTags();
+        this.loadTags();
     }
 
     private loadCategories(): void {
@@ -94,17 +124,11 @@ export class PostCreate implements OnInit {
         });
     }
 
-    private loadAllTags(): void {
-        this.apiService.getPosts().subscribe({
+    private loadTags(): void {
+        this.apiService.getTags().subscribe({
             next: (response) => {
                 if (response.success && response.data) {
-                    const tagSet = new Set<string>();
-                    response.data.forEach((post) => {
-                        if (post.tags && Array.isArray(post.tags)) {
-                            post.tags.forEach((tag) => tagSet.add(tag));
-                        }
-                    });
-                    this.allTags.set(Array.from(tagSet).sort());
+                    this.allTags.set(response.data);
                 }
             },
             error: () => {
@@ -132,20 +156,51 @@ export class PostCreate implements OnInit {
             return;
         }
 
+        // Convert tag names to ITagInput format
+        const tagInputs: ITagInput[] = [];
+        if (this.form.value.tags && this.form.value.tags.length > 0) {
+            this.form.value.tags.forEach((tagName: string) => {
+                const existingTag = this.allTags().find((t) => t.name === tagName);
+                if (existingTag) {
+                    tagInputs.push({ id: existingTag._id, name: existingTag.name });
+                } else {
+                    tagInputs.push({ name: tagName });
+                }
+            });
+        }
+
         const request: IPostCreateRequest = {
             title: this.form.value.title,
             content: this.form.value.content,
             slug: this.form.value.slug,
             excerpt: this.form.value.excerpt || null,
-            tags: this.form.value.tags && this.form.value.tags.length > 0 ? this.form.value.tags : null,
+            tags: tagInputs.length > 0 ? tagInputs : null,
             category_id: this.form.value.category_id || null,
+            thumbnail: this.selectedThumbnail()?.cloudinary_url || null,
+            banner: this.selectedBanner()?.cloudinary_url || null,
         };
 
         this.loadingService.show();
+        const shouldPublish = this.form.value.status === 'published';
+        
         this.apiService.createPost(request).subscribe({
-            next: () => {
-                this.loadingService.hide();
-                this.router.navigate(['/posts']);
+            next: (response) => {
+                if (response.success && response.data && shouldPublish) {
+                    // If status is published, call publish endpoint
+                    this.apiService.publishPost(response.data._id).subscribe({
+                        next: () => {
+                            this.loadingService.hide();
+                            this.router.navigate(['/posts']);
+                        },
+                        error: () => {
+                            this.loadingService.hide();
+                            this.router.navigate(['/posts']);
+                        },
+                    });
+                } else {
+                    this.loadingService.hide();
+                    this.router.navigate(['/posts']);
+                }
             },
             error: () => {
                 this.loadingService.hide();
@@ -163,6 +218,57 @@ export class PostCreate implements OnInit {
 
     protected get content() {
         return this.form.get('content');
+    }
+
+    protected openFilePicker(): void {
+        this.filePickerRef.open();
+    }
+
+    protected openThumbnailPicker(): void {
+        this.thumbnailPickerRef.open();
+    }
+
+    protected openBannerPicker(): void {
+        this.bannerPickerRef.open();
+    }
+
+    protected onFileSelected(file: IFileResponse): void {
+        if (!file.cloudinary_url) {
+            return;
+        }
+
+        // Try to get the editor instance
+        const tinymce = (window as any).tinymce;
+        if (tinymce) {
+            const editor = tinymce.get('content') || tinymce.activeEditor;
+            if (editor) {
+                if (file.mime_type?.toLowerCase().startsWith('image/')) {
+                    editor.insertContent(`<img src="${file.cloudinary_url}" alt="${file.alt || file.name || ''}" style="max-width: 100%; height: auto;" />`);
+                } else {
+                    editor.insertContent(`<a href="${file.cloudinary_url}" target="_blank" rel="noopener noreferrer">${file.name || 'Download File'}</a>`);
+                }
+            }
+        }
+    }
+
+    protected onThumbnailSelected(file: IFileResponse): void {
+        this.selectedThumbnail.set(file);
+        this.form.patchValue({ thumbnail: file.cloudinary_url || '' });
+    }
+
+    protected onBannerSelected(file: IFileResponse): void {
+        this.selectedBanner.set(file);
+        this.form.patchValue({ banner: file.cloudinary_url || '' });
+    }
+
+    protected removeThumbnail(): void {
+        this.selectedThumbnail.set(null);
+        this.form.patchValue({ thumbnail: '' });
+    }
+
+    protected removeBanner(): void {
+        this.selectedBanner.set(null);
+        this.form.patchValue({ banner: '' });
     }
 }
 

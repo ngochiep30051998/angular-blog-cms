@@ -1,5 +1,9 @@
 .custom-select-container {
     position: relative;
     z-index: 1;
+    
+    &.open {
+        z-index: 100;
+    }
 }
 

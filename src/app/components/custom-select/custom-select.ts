@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, signal, HostListener } from '@angular/core';
+import { Component, Input, signal, HostListener, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -23,7 +23,9 @@ export interface SelectOption {
     },
   ],
 })
-export class CustomSelect implements ControlValueAccessor {
+export class CustomSelect implements ControlValueAccessor, OnChanges {
+    private static openSelects: Set<CustomSelect> = new Set();
+
     @Input() options: SelectOption[] = [];
     @Input() placeholder: string = 'Select an option';
     @Input() displayKey: string = 'label';
@@ -37,6 +39,17 @@ export class CustomSelect implements ControlValueAccessor {
 
     private onChange = (value: string | null) => {};
     private onTouched = () => {};
+    private currentValue: string | null = null;
+
+    ngOnChanges(changes: SimpleChanges): void {
+        // When options change, try to re-select the current value
+        if (changes['options'] && this.currentValue && this.options.length > 0) {
+            const option = this.options.find((opt) => opt[this.valueKey] === this.currentValue);
+            if (option && this.selectedOption()?.[this.valueKey] !== option[this.valueKey]) {
+                this.selectedOption.set(option);
+            }
+        }
+    }
 
     protected get filteredOptions(): SelectOption[] {
         if (this.excludeId) {
@@ -46,7 +59,20 @@ export class CustomSelect implements ControlValueAccessor {
     }
 
     protected toggleDropdown(): void {
-        this.isOpen.update((value) => !value);
+        const newValue = !this.isOpen();
+        if (newValue) {
+            // Close all other select boxes
+            CustomSelect.openSelects.forEach((select) => {
+                if (select !== this) {
+                    select.isOpen.set(false);
+                    CustomSelect.openSelects.delete(select);
+                }
+            });
+            CustomSelect.openSelects.add(this);
+        } else {
+            CustomSelect.openSelects.delete(this);
+        }
+        this.isOpen.set(newValue);
     }
 
     protected selectOption(option: SelectOption | null): void {
@@ -55,6 +81,7 @@ export class CustomSelect implements ControlValueAccessor {
         this.onChange(value);
         this.onTouched();
         this.isOpen.set(false);
+        CustomSelect.openSelects.delete(this);
     }
 
     protected isSelected(optionId: string): boolean {
@@ -80,11 +107,13 @@ export class CustomSelect implements ControlValueAccessor {
         const target = event.target as HTMLElement;
         if (!target.closest('.custom-select-container')) {
             this.isOpen.set(false);
+            CustomSelect.openSelects.delete(this);
         }
     }
 
     // ControlValueAccessor implementation
     writeValue(value: string | null): void {
+        this.currentValue = value;
         if (value) {
             const option = this.options.find((opt) => opt[this.valueKey] === value);
             this.selectedOption.set(option || null);

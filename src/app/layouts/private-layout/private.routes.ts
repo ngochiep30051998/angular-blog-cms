@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '../../guards/auth-guard';
 import { adminGuard } from '../../guards/admin-guard';
+import { writerGuard } from '../../guards/writer-guard';
 
 export const privateRoutes: Routes = [
     {
@@ -100,6 +101,36 @@ export const privateRoutes: Routes = [
                         loadComponent: () =>
                             import('../../pages/posts/edit/post-edit').then(
                                 (m) => m.PostEdit),
+                    },
+                ],
+            },
+            {
+                path: 'files',
+                loadComponent: () =>
+                    import('../../pages/files/files-list').then(
+                        (m) => m.FilesList),
+                canActivate: [writerGuard],
+            },
+            {
+                path: 'tags',
+                children: [
+                    {
+                        path: '',
+                        loadComponent: () =>
+                            import('../../pages/tags/tags-list').then(
+                                (m) => m.TagsList),
+                    },
+                    {
+                        path: 'create',
+                        loadComponent: () =>
+                            import('../../pages/tags/tag-create').then(
+                                (m) => m.TagCreate),
+                    },
+                    {
+                        path: ':tagId/edit',
+                        loadComponent: () =>
+                            import('../../pages/tags/tag-edit').then(
+                                (m) => m.TagEdit),
                     },
                 ],
             },

@@ -1,0 +1,130 @@
+@if (isOpen()) {
+    <div class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" (click)="close()">
+        <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col" (click)="$event.stopPropagation()">
+            <!-- Header -->
+            <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+                <h3 class="text-sm font-bold text-[#2D3748]">
+                    @if (mode() === 'select') {
+                        Select File
+                    } @else {
+                        Insert File into Content
+                    }
+                </h3>
+                <div class="flex items-center gap-3">
+                    <input
+                        #fileInput
+                        type="file"
+                        accept="image/*"
+                        (change)="onFileSelected($event)"
+                        class="hidden"
+                    />
+                    <button
+                        type="button"
+                        (click)="triggerFileInput()"
+                        [disabled]="isUploading()"
+                        class="text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 font-medium rounded-lg text-sm px-3 py-1.5 text-center transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        @if (isUploading()) {
+                            Uploading...
+                        } @else {
+                            + Upload
+                        }
+                    </button>
+                    <button
+                        type="button"
+                        (click)="close()"
+                        class="text-[#A0AEC0] hover:text-[#2D3748] transition-colors"
+                    >
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Files Gallery -->
+            <div class="flex-1 overflow-y-auto p-4">
+                @if (files().length === 0) {
+                    <div class="text-center py-12">
+                        <p class="text-[#A0AEC0] text-sm">No files found. Upload your first file to get started.</p>
+                    </div>
+                } @else {
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        @for (file of files(); track file._id) {
+                            <div class="group relative bg-[#F7FAFC] rounded-lg overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer" (click)="selectFile(file)">
+                                @if (isImageFile(file)) {
+                                    <div class="aspect-square relative">
+                                        <img
+                                            [src]="file.cloudinary_url || ''"
+                                            [alt]="file.alt || file.name || 'Image'"
+                                            class="w-full h-full object-cover"
+                                            onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'%3E%3Crect fill=\'%23ddd\' width=\'100\' height=\'100\'/%3E%3Ctext fill=\'%23999\' font-family=\'sans-serif\' font-size=\'14\' x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\'%3EBroken Image%3C/text%3E%3C/svg%3E'"
+                                        />
+                                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-200 flex items-center justify-center">
+                                            <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                <span class="px-3 py-1.5 text-white bg-blue-500 rounded-lg text-xs font-medium">
+                                                    Select
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                } @else {
+                                    <div class="aspect-square flex flex-col items-center justify-center p-4">
+                                        <div class="text-4xl mb-2">{{ getFileIcon(file.mime_type) }}</div>
+                                        <p class="text-xs text-[#2D3748] font-medium text-center truncate w-full">
+                                            {{ file.name || 'Unknown File' }}
+                                        </p>
+                                        <p class="text-xs text-[#A0AEC0] mt-1">{{ file.mime_type }}</p>
+                                    </div>
+                                }
+                                <div class="p-2">
+                                    <p class="text-xs text-[#2D3748] font-medium truncate" [title]="file.name || 'Untitled'">
+                                        {{ file.name || 'Untitled' }}
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+
+                @if (totalPages() > 1) {
+                    <div class="mt-6 pt-4 border-t border-gray-200 flex items-center justify-between">
+                        <div class="text-sm text-[#A0AEC0]">
+                            Page {{ currentPage() }} of {{ totalPages() }}
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button
+                                type="button"
+                                (click)="previousPage()"
+                                [disabled]="currentPage() === 1"
+                                class="px-3 py-2 text-sm font-bold text-[#2D3748] bg-[#F7FAFC] hover:bg-gray-200 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Previous
+                            </button>
+                            @for (page of pages(); track page) {
+                                <button
+                                    type="button"
+                                    (click)="goToPage(page)"
+                                    [class]="page === currentPage()
+                                        ? 'px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg'
+                                        : 'px-3 py-2 text-sm font-bold text-[#2D3748] bg-[#F7FAFC] hover:bg-gray-200 rounded-lg transition-colors duration-200'"
+                                >
+                                    {{ page }}
+                                </button>
+                            }
+                            <button
+                                type="button"
+                                (click)="nextPage()"
+                                [disabled]="currentPage() === totalPages()"
+                                class="px-3 py-2 text-sm font-bold text-[#2D3748] bg-[#F7FAFC] hover:bg-gray-200 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+

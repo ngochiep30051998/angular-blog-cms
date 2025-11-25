@@ -12,6 +12,7 @@
                     "posts"
                 ],
                 "summary": "Get all blog posts",
+                "description": "Get all blog posts with optional multi-tag filtering\n\n- **tag_ids**: Filter posts by tag IDs (e.g., ?tag_ids=id1&tag_ids=id2)\n- **tag_names**: Filter posts by tag names (e.g., ?tag_names=python&tag_names=fastapi)\n- **match_all**: \n    - `true` (default): Posts must have ALL specified tags (AND logic)\n    - `false`: Posts must have ANY of the specified tags (OR logic)",
                 "operationId": "get_posts_api_v1_posts_get",
                 "parameters": [
                     {
@@ -40,6 +41,46 @@
                             "title": "Page Size"
                         },
                         "description": "Number of posts per page"
+                    },
+                    {
+                        "name": "tag_ids",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "description": "Filter by tag IDs (comma-separated)",
+                            "title": "Tag Ids"
+                        },
+                        "description": "Filter by tag IDs (comma-separated)"
+                    },
+                    {
+                        "name": "tag_names",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "description": "Filter by tag names (comma-separated)",
+                            "title": "Tag Names"
+                        },
+                        "description": "Filter by tag names (comma-separated)"
+                    },
+                    {
+                        "name": "match_all",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "description": "If true, posts must have ALL tags (AND). If false, posts must have ANY tag (OR)",
+                            "default": true,
+                            "title": "Match All"
+                        },
+                        "description": "If true, posts must have ALL tags (AND). If false, posts must have ANY tag (OR)"
                     }
                 ],
                 "responses": {
@@ -274,6 +315,54 @@
                 "summary": "Publish a blog post",
                 "description": "Publish a blog post (change status to published)",
                 "operationId": "publish_post_api_v1_posts__post_id__publish_patch",
+                "parameters": [
+                    {
+                        "name": "post_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Post Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BaseResponse_PostResponse_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/posts/{post_id}/unpublish": {
+            "patch": {
+                "tags": [
+                    "posts"
+                ],
+                "summary": "Unpublish a blog post",
+                "description": "Unpublish a blog post (change status back to draft)",
+                "operationId": "unpublish_post_api_v1_posts__post_id__unpublish_patch",
                 "parameters": [
                     {
                         "name": "post_id",
@@ -574,6 +663,266 @@
                 ]
             }
         },
+        "/api/v1/tags": {
+            "get": {
+                "tags": [
+                    "tags"
+                ],
+                "summary": "Get all tags",
+                "operationId": "get_tags_api_v1_tags_get",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "description": "Page number",
+                            "default": 1,
+                            "title": "Page"
+                        },
+                        "description": "Page number"
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 100,
+                            "minimum": 1,
+                            "description": "Number of tags per page",
+                            "default": 10,
+                            "title": "Page Size"
+                        },
+                        "description": "Number of tags per page"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BaseResponse_List_TagResponse__"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "tags"
+                ],
+                "summary": "Create a new tag",
+                "description": "Create a new tag",
+                "operationId": "create_tag_api_v1_tags_post",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TagCreateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BaseResponse_TagResponse_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/tags/{tag_id}": {
+            "get": {
+                "tags": [
+                    "tags"
+                ],
+                "summary": "Get a tag by ID",
+                "description": "Get a tag by ID",
+                "operationId": "get_tag_api_v1_tags__tag_id__get",
+                "parameters": [
+                    {
+                        "name": "tag_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Tag Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BaseResponse_TagResponse_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "tags"
+                ],
+                "summary": "Update a tag",
+                "description": "Update a tag (partial update)",
+                "operationId": "update_tag_api_v1_tags__tag_id__patch",
+                "parameters": [
+                    {
+                        "name": "tag_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Tag Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TagUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BaseResponse_TagResponse_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "tags"
+                ],
+                "summary": "Delete a tag",
+                "description": "Delete a tag",
+                "operationId": "delete_tag_api_v1_tags__tag_id__delete",
+                "parameters": [
+                    {
+                        "name": "tag_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Tag Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BaseResponse_bool_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/auth/register": {
             "post": {
                 "tags": [
@@ -846,13 +1195,13 @@
             }
         },
         "/api/v1/users/{user_id}/lock": {
-            "patch": {
+            "post": {
                 "tags": [
                     "users"
                 ],
-                "summary": "Lock or unlock user",
-                "description": "Lock or unlock a user\nRequires: Admin role",
-                "operationId": "lock_user_api_v1_users__user_id__lock_patch",
+                "summary": "Lock user account",
+                "description": "Lock a user account (admin only).\nThis action is logged for audit purposes.",
+                "operationId": "lock_user_api_v1_users__user_id__lock_post",
                 "parameters": [
                     {
                         "name": "user_id",
@@ -864,16 +1213,54 @@
                         }
                     }
                 ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UserLockRequest"
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BaseResponse_UserResponse_"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
                             }
                         }
                     }
                 },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users/{user_id}/unlock": {
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Unlock user account",
+                "description": "Unlock a user account (admin only).\nResets all lockout-related fields: locked, failed_attempts, locked_until.\nThis action is logged for audit purposes.",
+                "operationId": "unlock_user_api_v1_users__user_id__unlock_post",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "User Id"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful Response",
@@ -1436,6 +1823,77 @@
                 ],
                 "title": "BaseResponse[List[PostResponse]]"
             },
+            "BaseResponse_List_TagResponse__": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "title": "Success"
+                    },
+                    "message": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Message"
+                    },
+                    "data": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "$ref": "#/components/schemas/TagResponse"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Data"
+                    },
+                    "total": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Total"
+                    },
+                    "page": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Page"
+                    },
+                    "page_size": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Page Size"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "success"
+                ],
+                "title": "BaseResponse[List[TagResponse]]"
+            },
             "BaseResponse_List_UserResponse__": {
                 "properties": {
                     "success": {
@@ -1707,6 +2165,73 @@
                     "success"
                 ],
                 "title": "BaseResponse[RegisterResponse]"
+            },
+            "BaseResponse_TagResponse_": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "title": "Success"
+                    },
+                    "message": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Message"
+                    },
+                    "data": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TagResponse"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "total": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Total"
+                    },
+                    "page": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Page"
+                    },
+                    "page_size": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Page Size"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "success"
+                ],
+                "title": "BaseResponse[TagResponse]"
             },
             "BaseResponse_UserResponse_": {
                 "properties": {
@@ -2272,7 +2797,7 @@
                         "anyOf": [
                             {
                                 "items": {
-                                    "type": "string"
+                                    "$ref": "#/components/schemas/TagInput"
                                 },
                                 "type": "array"
                             },
@@ -2281,7 +2806,7 @@
                             }
                         ],
                         "title": "Tags",
-                        "default": []
+                        "description": "List of tags with id and/or name"
                     },
                     "category_id": {
                         "anyOf": [
@@ -2293,6 +2818,28 @@
                             }
                         ],
                         "title": "Category Id"
+                    },
+                    "thumbnail": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Thumbnail"
+                    },
+                    "banner": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Banner"
                     }
                 },
                 "type": "object",
@@ -2360,7 +2907,7 @@
                     },
                     "tags": {
                         "items": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/TagResponse"
                         },
                         "type": "array",
                         "title": "Tags"
@@ -2382,6 +2929,28 @@
                     "likes_count": {
                         "type": "integer",
                         "title": "Likes Count"
+                    },
+                    "thumbnail": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Thumbnail"
+                    },
+                    "banner": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Banner"
                     },
                     "created_at": {
                         "type": "string",
@@ -2413,7 +2982,6 @@
                     "title",
                     "content",
                     "status",
-                    "tags",
                     "views_count",
                     "likes_count",
                     "created_at",
@@ -2475,7 +3043,7 @@
                         "anyOf": [
                             {
                                 "items": {
-                                    "type": "string"
+                                    "$ref": "#/components/schemas/TagInput"
                                 },
                                 "type": "array"
                             },
@@ -2483,7 +3051,8 @@
                                 "type": "null"
                             }
                         ],
-                        "title": "Tags"
+                        "title": "Tags",
+                        "description": "List of tags with id and/or name"
                     },
                     "category_id": {
                         "anyOf": [
@@ -2495,6 +3064,28 @@
                             }
                         ],
                         "title": "Category Id"
+                    },
+                    "thumbnail": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Thumbnail"
+                    },
+                    "banner": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Banner"
                     }
                 },
                 "type": "object",
@@ -2576,18 +3167,163 @@
                 ],
                 "title": "Slug"
             },
-            "UserLockRequest": {
+            "TagCreateRequest": {
                 "properties": {
-                    "locked": {
-                        "type": "boolean",
-                        "title": "Locked"
+                    "name": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "minLength": 1,
+                        "title": "Name"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "slug": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Slug"
                     }
                 },
                 "type": "object",
                 "required": [
-                    "locked"
+                    "name"
                 ],
-                "title": "UserLockRequest"
+                "title": "TagCreateRequest"
+            },
+            "TagInput": {
+                "properties": {
+                    "id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Id"
+                    },
+                    "name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Name"
+                    }
+                },
+                "type": "object",
+                "title": "TagInput",
+                "description": "Tag input model that accepts either id, name, or both"
+            },
+            "TagResponse": {
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "pattern": "^[a-fA-F0-9]{24}$",
+                        "title": "Id"
+                    },
+                    "name": {
+                        "type": "string",
+                        "title": "Name"
+                    },
+                    "slug": {
+                        "$ref": "#/components/schemas/Slug"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "usage_count": {
+                        "type": "integer",
+                        "title": "Usage Count",
+                        "default": 0
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Created At"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Updated At"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "_id",
+                    "name",
+                    "slug",
+                    "created_at",
+                    "updated_at"
+                ],
+                "title": "TagResponse"
+            },
+            "TagUpdateRequest": {
+                "properties": {
+                    "name": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "maxLength": 100,
+                                "minLength": 1
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Name"
+                    },
+                    "description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Description"
+                    },
+                    "slug": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Slug"
+                    }
+                },
+                "type": "object",
+                "title": "TagUpdateRequest"
             },
             "UserResponse": {
                 "properties": {
@@ -2634,6 +3370,23 @@
                         "type": "boolean",
                         "title": "Locked",
                         "default": false
+                    },
+                    "failed_attempts": {
+                        "type": "integer",
+                        "title": "Failed Attempts",
+                        "default": 0
+                    },
+                    "locked_until": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Locked Until"
                     }
                 },
                 "type": "object",

@@ -127,9 +127,9 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex flex-wrap gap-1">
-                                    @for (tag of post?.tags?.slice(0, 3) || []; track tag) {
+                                    @for (tag of post?.tags?.slice(0, 3) || []; track tag._id) {
                                         <span class="px-2 py-1 bg-[#4FD1C5] bg-opacity-20 text-[#4FD1C5] rounded-full text-xs font-bold">
-                                            {{ tag }}
+                                            {{ tag.name }}
                                         </span>
                                     }
                                     @if ((post?.tags?.length || 0) > 3) {
