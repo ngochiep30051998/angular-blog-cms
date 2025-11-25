@@ -34,7 +34,7 @@
                 <p class="text-[#A0AEC0] text-sm">No files found. Upload your first file to get started.</p>
             </div>
         } @else {
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
                 @for (file of files(); track file._id) {
                     <div class="group relative bg-[#F7FAFC] rounded-lg overflow-hidden hover:shadow-lg transition-all duration-200">
                         @if (isImageFile(file)) {
