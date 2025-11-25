@@ -69,11 +69,33 @@ export class PostCreate implements OnInit {
         thumbnail: [''],
         banner: [''],
         status: ['draft'],
+        meta_title: ['', [Validators.maxLength(60)]],
+        meta_description: ['', [Validators.maxLength(160)]],
+        meta_keywords: [[]],
+        meta_robots: [''],
+        og_title: [''],
+        og_description: [''],
+        og_image: [''],
+        og_type: [''],
+        twitter_card: [''],
+        twitter_title: [''],
+        twitter_description: [''],
+        twitter_image: [''],
+        canonical_url: [''],
     });
+
+    protected readonly seoExpanded = signal<boolean>(false);
 
     protected readonly statusOptions: SelectOption[] = [
         { id: 'draft', label: 'Draft' },
         { id: 'published', label: 'Published' },
+    ];
+
+    protected readonly metaRobotsOptions: SelectOption[] = [
+        { id: 'index, follow', label: 'index, follow' },
+        { id: 'noindex, follow', label: 'noindex, follow' },
+        { id: 'index, nofollow', label: 'index, nofollow' },
+        { id: 'noindex, nofollow', label: 'noindex, nofollow' },
     ];
 
     @ViewChild('filePicker') filePickerRef!: FilePicker;
@@ -178,6 +200,19 @@ export class PostCreate implements OnInit {
             category_id: this.form.value.category_id || null,
             thumbnail: this.selectedThumbnail()?.cloudinary_url || null,
             banner: this.selectedBanner()?.cloudinary_url || null,
+            meta_title: this.form.value.meta_title || null,
+            meta_description: this.form.value.meta_description || null,
+            meta_keywords: this.form.value.meta_keywords && this.form.value.meta_keywords.length > 0 ? this.form.value.meta_keywords : null,
+            meta_robots: this.form.value.meta_robots || null,
+            og_title: this.form.value.og_title || null,
+            og_description: this.form.value.og_description || null,
+            og_image: this.form.value.og_image || null,
+            og_type: this.form.value.og_type || null,
+            twitter_card: this.form.value.twitter_card || null,
+            twitter_title: this.form.value.twitter_title || null,
+            twitter_description: this.form.value.twitter_description || null,
+            twitter_image: this.form.value.twitter_image || null,
+            canonical_url: this.form.value.canonical_url || null,
         };
 
         this.loadingService.show();
@@ -269,6 +304,29 @@ export class PostCreate implements OnInit {
     protected removeBanner(): void {
         this.selectedBanner.set(null);
         this.form.patchValue({ banner: '' });
+    }
+
+    protected toggleSeoSection(): void {
+        this.seoExpanded.set(!this.seoExpanded());
+    }
+
+    protected addMetaKeyword(keyword: string): void {
+        if (!keyword.trim()) {
+            return;
+        }
+        const currentKeywords = this.form.value.meta_keywords || [];
+        if (!currentKeywords.includes(keyword.trim())) {
+            this.form.patchValue({
+                meta_keywords: [...currentKeywords, keyword.trim()]
+            });
+        }
+    }
+
+    protected removeMetaKeyword(keyword: string): void {
+        const currentKeywords = this.form.value.meta_keywords || [];
+        this.form.patchValue({
+            meta_keywords: currentKeywords.filter((k: string) => k !== keyword)
+        });
     }
 }
 

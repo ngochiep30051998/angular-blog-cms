@@ -18,21 +18,25 @@
         line-height: 1.5;
     }
     
-    // Active state - white background card with teal icon background
+    // Active state - gradient background with white text
     a.router-link-active {
-        background-color: #FFFFFF !important;
+        background: linear-gradient(to right, #3B82F6, #9333EA) !important;
         box-shadow: 0px 3.5px 5.5px 0px rgba(0, 0, 0, 0.02) !important;
         
+        &:hover {
+            background: linear-gradient(to right, #2563EB, #7E22CE) !important;
+        }
+        
         .menu-icon-wrapper {
-            background-color: #4FD1C5 !important;
+            background-color: rgba(255, 255, 255, 0.2) !important;
         }
         
         .menu-icon {
-            filter: brightness(0) invert(1) !important; // White icon on teal background
+            filter: brightness(0) invert(1) !important; // White icon
         }
         
         .menu-text {
-            color: #2D3748 !important;
+            color: #FFFFFF !important;
         }
     }
     

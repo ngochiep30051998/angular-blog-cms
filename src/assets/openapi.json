@@ -89,7 +89,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/BaseResponse_List_PostResponse__"
+                                    "$ref": "#/components/schemas/BaseResponse_List_src.application.dto.post_dto.PostResponse__"
                                 }
                             }
                         }
@@ -445,7 +445,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/BaseResponse_List_CategoryResponse__"
+                                    "$ref": "#/components/schemas/BaseResponse_List_src.application.dto.category_dto.CategoryResponse__"
                                 }
                             }
                         }
@@ -705,7 +705,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/BaseResponse_List_TagResponse__"
+                                    "$ref": "#/components/schemas/BaseResponse_List_src.application.dto.tag_dto.TagResponse__"
                                 }
                             }
                         }
@@ -1113,7 +1113,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/BaseResponse_List_UserResponse__"
+                                    "$ref": "#/components/schemas/BaseResponse_List_src.application.dto.user_dto.UserResponse__"
                                 }
                             }
                         }
@@ -1479,7 +1479,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/BaseResponse_List_FileResponse__"
+                                    "$ref": "#/components/schemas/BaseResponse_List_src.application.dto.file_dto.FileResponse__"
                                 }
                             }
                         }
@@ -1610,7 +1610,7 @@
                 ],
                 "title": "BaseResponse[CategoryResponse]"
             },
-            "BaseResponse_List_CategoryResponse__": {
+            "BaseResponse_List_src.application.dto.category_dto.CategoryResponse__": {
                 "properties": {
                     "success": {
                         "type": "boolean",
@@ -1679,9 +1679,9 @@
                 "required": [
                     "success"
                 ],
-                "title": "BaseResponse[List[CategoryResponse]]"
+                "title": "BaseResponse[List[src.application.dto.category_dto.CategoryResponse]]"
             },
-            "BaseResponse_List_FileResponse__": {
+            "BaseResponse_List_src.application.dto.file_dto.FileResponse__": {
                 "properties": {
                     "success": {
                         "type": "boolean",
@@ -1750,9 +1750,9 @@
                 "required": [
                     "success"
                 ],
-                "title": "BaseResponse[List[FileResponse]]"
+                "title": "BaseResponse[List[src.application.dto.file_dto.FileResponse]]"
             },
-            "BaseResponse_List_PostResponse__": {
+            "BaseResponse_List_src.application.dto.post_dto.PostResponse__": {
                 "properties": {
                     "success": {
                         "type": "boolean",
@@ -1821,9 +1821,9 @@
                 "required": [
                     "success"
                 ],
-                "title": "BaseResponse[List[PostResponse]]"
+                "title": "BaseResponse[List[src.application.dto.post_dto.PostResponse]]"
             },
-            "BaseResponse_List_TagResponse__": {
+            "BaseResponse_List_src.application.dto.tag_dto.TagResponse__": {
                 "properties": {
                     "success": {
                         "type": "boolean",
@@ -1892,9 +1892,9 @@
                 "required": [
                     "success"
                 ],
-                "title": "BaseResponse[List[TagResponse]]"
+                "title": "BaseResponse[List[src.application.dto.tag_dto.TagResponse]]"
             },
-            "BaseResponse_List_UserResponse__": {
+            "BaseResponse_List_src.application.dto.user_dto.UserResponse__": {
                 "properties": {
                     "success": {
                         "type": "boolean",
@@ -1963,7 +1963,7 @@
                 "required": [
                     "success"
                 ],
-                "title": "BaseResponse[List[UserResponse]]"
+                "title": "BaseResponse[List[src.application.dto.user_dto.UserResponse]]"
             },
             "BaseResponse_LoginResponse_": {
                 "properties": {
@@ -2840,6 +2840,167 @@
                             }
                         ],
                         "title": "Banner"
+                    },
+                    "meta_title": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "maxLength": 60
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Meta Title",
+                        "description": "Meta title for SEO (recommended: 50-60 characters)"
+                    },
+                    "meta_description": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "maxLength": 160
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Meta Description",
+                        "description": "Meta description for SEO (recommended: 150-160 characters)"
+                    },
+                    "meta_keywords": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Meta Keywords",
+                        "description": "Meta keywords for SEO"
+                    },
+                    "meta_robots": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Meta Robots",
+                        "description": "Meta robots directive (e.g., 'index, follow', 'noindex, nofollow')"
+                    },
+                    "og_title": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Og Title",
+                        "description": "Open Graph title for social media sharing"
+                    },
+                    "og_description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Og Description",
+                        "description": "Open Graph description for social media sharing"
+                    },
+                    "og_image": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Og Image",
+                        "description": "Open Graph image URL for social media sharing"
+                    },
+                    "og_type": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Og Type",
+                        "description": "Open Graph type (e.g., 'article', 'website')"
+                    },
+                    "twitter_card": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Twitter Card",
+                        "description": "Twitter card type (e.g., 'summary_large_image', 'summary')"
+                    },
+                    "twitter_title": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Twitter Title",
+                        "description": "Twitter title for social media sharing"
+                    },
+                    "twitter_description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Twitter Description",
+                        "description": "Twitter description for social media sharing"
+                    },
+                    "twitter_image": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Twitter Image",
+                        "description": "Twitter image URL for social media sharing"
+                    },
+                    "canonical_url": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Canonical Url",
+                        "description": "Canonical URL for SEO"
                     }
                 },
                 "type": "object",
@@ -2951,6 +3112,145 @@
                             }
                         ],
                         "title": "Banner"
+                    },
+                    "meta_title": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Meta Title"
+                    },
+                    "meta_description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Meta Description"
+                    },
+                    "meta_keywords": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Meta Keywords"
+                    },
+                    "meta_robots": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Meta Robots"
+                    },
+                    "og_title": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Og Title"
+                    },
+                    "og_description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Og Description"
+                    },
+                    "og_image": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Og Image"
+                    },
+                    "og_type": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Og Type"
+                    },
+                    "twitter_card": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Twitter Card"
+                    },
+                    "twitter_title": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Twitter Title"
+                    },
+                    "twitter_description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Twitter Description"
+                    },
+                    "twitter_image": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Twitter Image"
+                    },
+                    "canonical_url": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Canonical Url"
                     },
                     "created_at": {
                         "type": "string",
@@ -3086,6 +3386,167 @@
                             }
                         ],
                         "title": "Banner"
+                    },
+                    "meta_title": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "maxLength": 60
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Meta Title",
+                        "description": "Meta title for SEO (recommended: 50-60 characters)"
+                    },
+                    "meta_description": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "maxLength": 160
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Meta Description",
+                        "description": "Meta description for SEO (recommended: 150-160 characters)"
+                    },
+                    "meta_keywords": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Meta Keywords",
+                        "description": "Meta keywords for SEO"
+                    },
+                    "meta_robots": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Meta Robots",
+                        "description": "Meta robots directive (e.g., 'index, follow', 'noindex, nofollow')"
+                    },
+                    "og_title": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Og Title",
+                        "description": "Open Graph title for social media sharing"
+                    },
+                    "og_description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Og Description",
+                        "description": "Open Graph description for social media sharing"
+                    },
+                    "og_image": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Og Image",
+                        "description": "Open Graph image URL for social media sharing"
+                    },
+                    "og_type": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Og Type",
+                        "description": "Open Graph type (e.g., 'article', 'website')"
+                    },
+                    "twitter_card": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Twitter Card",
+                        "description": "Twitter card type (e.g., 'summary_large_image', 'summary')"
+                    },
+                    "twitter_title": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Twitter Title",
+                        "description": "Twitter title for social media sharing"
+                    },
+                    "twitter_description": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Twitter Description",
+                        "description": "Twitter description for social media sharing"
+                    },
+                    "twitter_image": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Twitter Image",
+                        "description": "Twitter image URL for social media sharing"
+                    },
+                    "canonical_url": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Canonical Url",
+                        "description": "Canonical URL for SEO"
                     }
                 },
                 "type": "object",

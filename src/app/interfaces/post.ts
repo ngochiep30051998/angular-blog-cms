@@ -10,6 +10,19 @@ export interface IPostCreateRequest {
     category_id?: string | null;
     thumbnail?: string | null;
     banner?: string | null;
+    meta_title?: string | null;
+    meta_description?: string | null;
+    meta_keywords?: string[] | null;
+    meta_robots?: string | null;
+    og_title?: string | null;
+    og_description?: string | null;
+    og_image?: string | null;
+    og_type?: string | null;
+    twitter_card?: string | null;
+    twitter_title?: string | null;
+    twitter_description?: string | null;
+    twitter_image?: string | null;
+    canonical_url?: string | null;
 }
 
 export interface IPostUpdateRequest {
@@ -21,6 +34,19 @@ export interface IPostUpdateRequest {
     category_id?: string | null;
     thumbnail?: string | null;
     banner?: string | null;
+    meta_title?: string | null;
+    meta_description?: string | null;
+    meta_keywords?: string[] | null;
+    meta_robots?: string | null;
+    og_title?: string | null;
+    og_description?: string | null;
+    og_image?: string | null;
+    og_type?: string | null;
+    twitter_card?: string | null;
+    twitter_title?: string | null;
+    twitter_description?: string | null;
+    twitter_image?: string | null;
+    canonical_url?: string | null;
 }
 
 export interface IPostResponse {
@@ -40,6 +66,19 @@ export interface IPostResponse {
     likes_count: number;
     thumbnail?: string | null;
     banner?: string | null;
+    meta_title?: string | null;
+    meta_description?: string | null;
+    meta_keywords?: string[] | null;
+    meta_robots?: string | null;
+    og_title?: string | null;
+    og_description?: string | null;
+    og_image?: string | null;
+    og_type?: string | null;
+    twitter_card?: string | null;
+    twitter_title?: string | null;
+    twitter_description?: string | null;
+    twitter_image?: string | null;
+    canonical_url?: string | null;
     created_at: string;
     updated_at: string;
     published_at?: string | null;
