@@ -85,20 +85,18 @@ export class UsersList implements OnInit {
     }
 
     private performLockToggle(user: IUser): void {
-        const request: IUserLockRequest = {
-            locked: !user.locked,
-        };
-
         this.loadingService.show();
-        this.apiService.lockUser(user._id, request).subscribe({
-            next: () => {
-                this.loadUsers();
-            },
-            error: () => {
-                this.loadingService.hide();
-            },
+      
+        const apiCall$ = user.locked
+          ? this.apiService.unlockUser(user._id)
+          : this.apiService.lockUser(user._id);
+      
+        apiCall$.subscribe({
+          next: () => this.loadUsers(),
+          error: () => this.loadingService.hide(),
         });
-    }
+      }
+
 
     protected confirmLock(): void {
         this.modalService.close(true);

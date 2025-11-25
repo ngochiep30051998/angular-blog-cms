@@ -65,8 +65,11 @@ export class ApiService {
         return this.httpClient.patch<IBaseResponse<IUser>>(`${this.apiUrl}/users/${userId}`, req);
     }
 
-    lockUser(userId: string, req: IUserLockRequest): Observable<IBaseResponse<IUser>> {
-        return this.httpClient.patch<IBaseResponse<IUser>>(`${this.apiUrl}/users/${userId}/lock`, req);
+    lockUser(userId: string): Observable<IBaseResponse<IUser>> {
+        return this.httpClient.post<IBaseResponse<IUser>>(`${this.apiUrl}/users/${userId}/lock`, {});
+    }
+    unlockUser(userId: string): Observable<IBaseResponse<IUser>> {
+        return this.httpClient.post<IBaseResponse<IUser>>(`${this.apiUrl}/users/${userId}/unlock`, {});
     }
 
     changePassword(userId: string, req: IChangePasswordRequest): Observable<IBaseResponse<Record<string, unknown>>> {
