@@ -26,6 +26,9 @@ export class Sidebar {
 
     public readonly isCollapsed = signal<boolean>(false);
 
+    public readonly tooltipText = signal<string>('');
+    public readonly tooltipPosition = signal<{ x: number; y: number }>({ x: 0, y: 0 });
+
     public readonly isAdmin = computed(() => {
         return this.userProfile()?.role === 'admin';
     });
@@ -86,5 +89,22 @@ export class Sidebar {
 
     public toggleCollapse(): void {
         this.isCollapsed.update(value => !value);
+        if (!this.isCollapsed()) {
+            this.hideTooltip();
+        }
+    }
+
+    public showTooltip(event: MouseEvent, text: string): void {
+        const target = event.currentTarget as HTMLElement;
+        const rect = target.getBoundingClientRect();
+        this.tooltipText.set(text);
+        this.tooltipPosition.set({
+            x: rect.right + 12,
+            y: rect.top + rect.height / 2
+        });
+    }
+
+    public hideTooltip(): void {
+        this.tooltipText.set('');
     }
 }

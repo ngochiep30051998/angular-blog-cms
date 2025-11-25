@@ -20,13 +20,14 @@
     <nav [class]="isCollapsed() ? 'px-2 py-4 flex-1 overflow-y-auto' : 'px-4 py-4 flex-1 overflow-y-auto'">
         <ul class="space-y-1">
             @for (item of menuItems(); track item.route) {
-                <li>
+                <li [class]="isCollapsed() ? 'relative' : ''">
                     <a
                         [routerLink]="item.route"
                         routerLinkActive="router-link-active"
                         [routerLinkActiveOptions]="{ exact: false }"
-                        [class]="isCollapsed() ? 'flex items-center justify-center px-2 py-3 rounded-[15px] transition-all duration-200 cursor-pointer text-sm font-bold' : 'flex items-center gap-3 px-4 py-3 rounded-[15px] transition-all duration-200 cursor-pointer text-sm font-bold'"
-                        [title]="isCollapsed() ? item.label : ''"
+                        [class]="isCollapsed() ? 'flex items-center justify-center px-2 py-3 rounded-[15px] transition-all duration-200 cursor-pointer text-sm font-bold relative' : 'flex items-center gap-3 px-4 py-3 rounded-[15px] transition-all duration-200 cursor-pointer text-sm font-bold'"
+                        (mouseenter)="isCollapsed() && showTooltip($event, item.label)"
+                        (mouseleave)="isCollapsed() && hideTooltip()"
                     >
                         <div class="flex-shrink-0 w-[30px] h-[30px] flex items-center justify-center rounded-[12px] menu-icon-wrapper">
                             <img 
@@ -43,6 +44,17 @@
             }
         </ul>
     </nav>
+
+    <!-- Tooltip (shown when collapsed) -->
+    @if (isCollapsed() && tooltipText()) {
+        <div 
+            class="tooltip"
+            [style.left.px]="tooltipPosition().x"
+            [style.top.px]="tooltipPosition().y"
+        >
+            {{ tooltipText() }}
+        </div>
+    }
 
     <!-- Collapse Button Section -->
     <div [class]="isCollapsed() ? 'px-2 py-4 border-t border-gray-200' : 'px-4 py-4 border-t border-gray-200'">
