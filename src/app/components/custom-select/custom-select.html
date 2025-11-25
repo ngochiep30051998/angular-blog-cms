@@ -22,12 +22,18 @@
                 }
             </div>
             <div class="flex flex-col ml-2 flex-shrink-0">
-                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                </svg>
-                <svg class="w-4 h-4 text-gray-400 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
+                <div 
+                    class="w-4 h-4 text-gray-400"
+                    [style.mask-image]="'url(assets/images/svgs/chevron-up.svg)'"
+                    [style.-webkit-mask-image]="'url(assets/images/svgs/chevron-up.svg)'"
+                    style="mask-size: contain; mask-repeat: no-repeat; mask-position: center; -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor;"
+                ></div>
+                <div 
+                    class="w-4 h-4 text-gray-400 -mt-1"
+                    [style.mask-image]="'url(assets/images/svgs/chevron-down.svg)'"
+                    [style.-webkit-mask-image]="'url(assets/images/svgs/chevron-down.svg)'"
+                    style="mask-size: contain; mask-repeat: no-repeat; mask-position: center; -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor;"
+                ></div>
             </div>
         </div>
     </button>
@@ -48,9 +54,12 @@
                     }
                     <span class="text-gray-900 font-medium">{{ placeholder }}</span>
                     @if (!selectedOption()) {
-                        <svg class="w-5 h-5 text-purple-600 ml-auto flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
+                        <div 
+                            class="w-5 h-5 text-purple-600 ml-auto flex-shrink-0"
+                            [style.mask-image]="'url(assets/images/svgs/check.svg)'"
+                            [style.-webkit-mask-image]="'url(assets/images/svgs/check.svg)'"
+                            style="mask-size: contain; mask-repeat: no-repeat; mask-position: center; -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor;"
+                        ></div>
                     }
                 </button>
                 @for (option of filteredOptions; track option[valueKey]) {
@@ -69,15 +78,21 @@
                             </div>
                         }
                         @if ((option.level || 0) > 0) {
-                            <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
+                            <div 
+                                class="w-4 h-4 text-gray-400 flex-shrink-0"
+                                [style.mask-image]="'url(assets/images/svgs/chevron-right.svg)'"
+                                [style.-webkit-mask-image]="'url(assets/images/svgs/chevron-right.svg)'"
+                                style="mask-size: contain; mask-repeat: no-repeat; mask-position: center; -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor;"
+                            ></div>
                         }
                         <span class="text-gray-900 font-medium flex-1">{{ getDisplayLabel(option) }}</span>
                         @if (isSelected(option[valueKey])) {
-                            <svg class="w-5 h-5 text-purple-600 ml-auto flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                            </svg>
+                            <div 
+                                class="w-5 h-5 text-purple-600 ml-auto flex-shrink-0"
+                                [style.mask-image]="'url(assets/images/svgs/check.svg)'"
+                                [style.-webkit-mask-image]="'url(assets/images/svgs/check.svg)'"
+                                style="mask-size: contain; mask-repeat: no-repeat; mask-position: center; -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor;"
+                            ></div>
                         }
                     </button>
                 }

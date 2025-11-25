@@ -53,21 +53,22 @@
                         (click)="toggleCategory(category._id)"
                         class="p-1 hover:bg-gray-200 rounded transition-all duration-200 flex-shrink-0"
                       >
-                        <svg
+                        <div
                           class="w-4 h-4 text-[#2D3748] transition-transform duration-200"
                           [class.rotate-90]="isExpanded(category._id)"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
+                          [style.mask-image]="'url(assets/images/svgs/chevron-right.svg)'"
+                          [style.-webkit-mask-image]="'url(assets/images/svgs/chevron-right.svg)'"
+                          style="mask-size: contain; mask-repeat: no-repeat; mask-position: center; -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor;"
+                        ></div>
                       </button>
                     } @else {
                       @if (category.level > 0) {
-                        <svg class="w-4 h-4 text-[#A0AEC0] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
+                        <div 
+                          class="w-4 h-4 text-[#A0AEC0] flex-shrink-0"
+                          [style.mask-image]="'url(assets/images/svgs/chevron-right.svg)'"
+                          [style.-webkit-mask-image]="'url(assets/images/svgs/chevron-right.svg)'"
+                          style="mask-size: contain; mask-repeat: no-repeat; mask-position: center; -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor;"
+                        ></div>
                       } @else {
                         <div class="w-6 flex-shrink-0"></div>
                       }

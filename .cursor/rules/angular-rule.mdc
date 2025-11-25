@@ -46,3 +46,6 @@ alwaysApply: true
 - Button Gradient duotone style, size medium
 - default font-size as text-sm 
 - default input styles as px-3 py-3
+
+# html rules
+- export all svg to src/assets/svgs

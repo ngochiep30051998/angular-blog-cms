@@ -165,9 +165,12 @@
                             (click)="openThumbnailPicker()"
                             class="w-full h-48 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center hover:border-blue-500 transition-colors bg-gray-50"
                         >
-                            <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
+                            <div 
+                                class="w-8 h-8 text-gray-400 mb-2"
+                                [style.mask-image]="'url(assets/images/svgs/plus.svg)'"
+                                [style.-webkit-mask-image]="'url(assets/images/svgs/plus.svg)'"
+                                style="mask-size: contain; mask-repeat: no-repeat; mask-position: center; -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor;"
+                            ></div>
                             <span class="text-sm text-gray-600">Select Thumbnail</span>
                         </button>
                     }
@@ -220,9 +223,12 @@
                             (click)="openBannerPicker()"
                             class="w-full h-48 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center hover:border-blue-500 transition-colors bg-gray-50"
                         >
-                            <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
+                            <div 
+                                class="w-8 h-8 text-gray-400 mb-2"
+                                [style.mask-image]="'url(assets/images/svgs/plus.svg)'"
+                                [style.-webkit-mask-image]="'url(assets/images/svgs/plus.svg)'"
+                                style="mask-size: contain; mask-repeat: no-repeat; mask-position: center; -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor;"
+                            ></div>
                             <span class="text-sm text-gray-600">Select Banner</span>
                         </button>
                     }

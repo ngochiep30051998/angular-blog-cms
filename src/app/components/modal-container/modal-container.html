@@ -11,9 +11,12 @@
                     class="ml-auto p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
                     aria-label="Close modal"
                 >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <div 
+                        class="w-5 h-5"
+                        [style.mask-image]="'url(assets/images/svgs/close.svg)'"
+                        [style.-webkit-mask-image]="'url(assets/images/svgs/close.svg)'"
+                        style="mask-size: contain; mask-repeat: no-repeat; mask-position: center; -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor;"
+                    ></div>
                 </button>
             }
         </div>

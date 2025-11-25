@@ -51,14 +51,12 @@
             [class]="isCollapsed() ? 'flex items-center justify-center px-2 py-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 cursor-pointer text-[#A0AEC0] text-sm font-bold w-full' : 'flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 cursor-pointer text-[#A0AEC0] text-sm font-bold w-full'"
             [title]="isCollapsed() ? 'Expand' : 'Collapse'"
         >
-            <svg 
-                [class]="isCollapsed() ? 'w-5 h-5 transform rotate-180' : 'w-5 h-5'" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-            >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-            </svg>
+            <div 
+                [class]="isCollapsed() ? 'w-5 h-5 transform rotate-180' : 'w-5 h-5'"
+                [style.mask-image]="'url(assets/images/svgs/collapse.svg)'"
+                [style.-webkit-mask-image]="'url(assets/images/svgs/collapse.svg)'"
+                style="mask-size: contain; mask-repeat: no-repeat; mask-position: center; -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor;"
+            ></div>
             @if (!isCollapsed()) {
                 <span>Collapse</span>
             }

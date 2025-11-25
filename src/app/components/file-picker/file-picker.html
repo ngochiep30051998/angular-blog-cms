@@ -35,9 +35,12 @@
                         (click)="close()"
                         class="text-[#A0AEC0] hover:text-[#2D3748] transition-colors"
                     >
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <div 
+                            class="w-6 h-6"
+                            [style.mask-image]="'url(assets/images/svgs/close.svg)'"
+                            [style.-webkit-mask-image]="'url(assets/images/svgs/close.svg)'"
+                            style="mask-size: contain; mask-repeat: no-repeat; mask-position: center; -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor;"
+                        ></div>
                     </button>
                 </div>
             </div>
