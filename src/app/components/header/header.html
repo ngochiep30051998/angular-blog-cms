@@ -3,8 +3,13 @@
         <!-- Breadcrumbs -->
         <div class="flex items-center gap-2">
             <div class="flex items-center gap-1">
-                <span class="text-[#A0AEC0] text-xs font-normal">Pages</span>
-                <span class="text-[#2D3748] text-2xl font-normal leading-[1.5]">/</span>
+                <div 
+                    class="w-3 h-3 text-[#A0AEC0]"
+                    [style.mask-image]="'url(assets/images/svgs/home.svg)'"
+                    [style.-webkit-mask-image]="'url(assets/images/svgs/home.svg)'"
+                    style="mask-size: contain; mask-repeat: no-repeat; mask-position: center; -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; background-color: currentColor;"
+                ></div>
+                <span class="text-[#2D3748]">/</span>
                 <span class="text-[#2D3748] text-sm font-bold leading-[1.4]">{{ getCurrentPageTitle() }}</span>
             </div>
         </div>
