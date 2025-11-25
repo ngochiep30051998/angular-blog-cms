@@ -69,13 +69,13 @@ export const privateRoutes: Routes = [
                     {
                         path: '',
                         loadComponent: () =>
-                            import('../../pages/users/users-list').then(
+                            import('../../pages/users/list/users-list').then(
                                 (m) => m.UsersList),
                     },
                     {
                         path: 'create',
                         loadComponent: () =>
-                            import('../../pages/users/user-create').then(
+                            import('../../pages/users/create/user-create').then(
                                 (m) => m.UserCreate),
                     },
                 ],

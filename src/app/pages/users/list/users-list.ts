@@ -1,10 +1,10 @@
 import { Component, OnInit, inject, signal, computed, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ApiService } from '../../services/api-service';
-import { LoadingService } from '../../services/loading-service';
-import { ModalService } from '../../services/modal-service';
-import { IUser, IUserLockRequest } from '../../interfaces/user.interface';
+import { ApiService } from '../../../services/api-service';
+import { LoadingService } from '../../../services/loading-service';
+import { ModalService } from '../../../services/modal-service';
+import { IUser, IUserLockRequest } from '../../../interfaces/user.interface';
 
 @Component({
     selector: 'app-users-list',

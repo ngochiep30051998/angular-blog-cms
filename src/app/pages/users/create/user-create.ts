@@ -2,10 +2,10 @@ import { Component, inject } from '@angular/core';
 import { CommonModule, formatDate } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { ApiService } from '../../services/api-service';
-import { LoadingService } from '../../services/loading-service';
-import { IRegisterRequest } from '../../interfaces/user.interface';
-import { CustomSelect, SelectOption } from '../../components/custom-select/custom-select';
+import { ApiService } from '../../../services/api-service';
+import { LoadingService } from '../../../services/loading-service';
+import { IRegisterRequest } from '../../../interfaces/user.interface';
+import { CustomSelect, SelectOption } from '../../../components/custom-select/custom-select';
 
 @Component({
     selector: 'app-user-create',
