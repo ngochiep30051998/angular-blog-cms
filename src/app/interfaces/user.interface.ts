@@ -7,6 +7,9 @@ export interface IUser {
     created_at: string;
     updated_at: string;
     locked?: boolean;
+    failed_attempts: number;
+    locked_until: string | null;
+    
 }
 
 export interface IUserUpdateRequest {

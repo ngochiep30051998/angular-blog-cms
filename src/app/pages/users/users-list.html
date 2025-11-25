@@ -30,6 +30,12 @@
                             Status
                         </th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                            Failed Attempts
+                        </th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                            Locked Until
+                        </th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
                             Created At
                         </th>
                         <th class="px-6 py-3 text-right text-sm font-medium text-gray-500 uppercase tracking-wider">
@@ -40,7 +46,7 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     @if (users().length === 0) {
                         <tr>
-                            <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                            <td colspan="8" class="px-6 py-8 text-center text-gray-500">
                                 No users found.
                             </td>
                         </tr>
@@ -64,6 +70,20 @@
                                 } @else {
                                     <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">Active</span>
                                 }
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-500">
+                                    {{ user.failed_attempts }}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-500">
+                                    @if (getLocalDate(user.locked_until)) {
+                                        {{ getLocalDate(user.locked_until) | date:'yyyy-MM-dd HH:mm' }}
+                                    } @else {
+                                        -
+                                    }
+                                </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-gray-500">

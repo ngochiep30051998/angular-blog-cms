@@ -128,5 +128,23 @@ export class UsersList implements OnInit {
             this.loadUsers();
         }
     }
+
+    protected getLocalDate(dateString: string | null): Date | null {
+        if (!dateString) {
+            return null;
+        }
+        // If the date string doesn't have timezone info (no Z or +/- offset),
+        // treat it as UTC so it converts to local timezone
+        let dateStr = dateString.trim();
+        if (!dateStr.endsWith('Z') && !dateStr.match(/[+-]\d{2}:\d{2}$/)) {
+            // Append 'Z' to indicate UTC if no timezone info
+            dateStr = dateStr + 'Z';
+        }
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) {
+            return null;
+        }
+        return date;
+    }
 }
 
