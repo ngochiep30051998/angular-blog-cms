@@ -6,6 +6,11 @@
 
 /* You can add global styles to this file, and also import other style files */
 
+body {
+    background-color: #F7FAFC;
+    font-family: 'Helvetica', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
 /* Modal Overlay Styles */
 .modal-backdrop {
     background-color: rgba(0, 0, 0, 0.5);

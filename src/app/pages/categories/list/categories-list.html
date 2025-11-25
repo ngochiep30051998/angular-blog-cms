@@ -1,35 +1,35 @@
 <div class="space-y-6">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-lg font-bold text-gray-800">Categories</h1>
-      <p class="text-sm text-gray-500">Manage your blog categories</p>
+      <h1 class="text-lg font-bold text-[#2D3748]">Categories</h1>
+      <p class="text-sm text-[#A0AEC0]">Manage your blog categories</p>
     </div>
     <a
       routerLink="/categories/create"
-      class="text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-xl text-sm px-4 py-2.5 text-center transition-all duration-200"
+      class="text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 font-medium rounded-lg text-sm px-4 py-2.5 text-center transition-all duration-200"
     >
       + New Category
     </a>
   </div>
 
-  <div class="bg-white rounded-lg shadow-md overflow-hidden">
+  <div class="bg-white rounded-lg shadow-[0px_3.5px_5.5px_0px_rgba(0,0,0,0.02)] overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full">
-        <thead class="bg-gray-50 border-b border-gray-200">
+        <thead class="bg-[#F7FAFC] border-b border-gray-200">
           <tr>
-            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+            <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
               Name
             </th>
-            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+            <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
               Slug
             </th>
-            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+            <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
               Description
             </th>
-            <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+            <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
               Created At
             </th>
-            <th class="px-6 py-3 text-right text-sm font-medium text-gray-500 uppercase tracking-wider">
+            <th class="px-6 py-3 text-right text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
               Actions
             </th>
           </tr>
@@ -37,13 +37,13 @@
         <tbody class="bg-white divide-y divide-gray-200">
           @if (allCategories().length === 0) {
             <tr>
-              <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+              <td colspan="5" class="px-6 py-8 text-center text-[#A0AEC0] text-sm">
                 No categories found. Create a new one to get started.
               </td>
             </tr>
           }
           @for (category of allCategories(); track category._id) {
-            <tr class="hover:bg-gray-50 transition-colors" [class.bg-gray-50]="category.level > 0">
+            <tr class="hover:bg-[#F7FAFC] transition-colors duration-200 table-row" [class.bg-[#F7FAFC]]="category.level > 0">
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center gap-2" [style.padding-left.px]="category.level * 24">
                   <div class="flex items-center gap-2 flex-1">
@@ -54,7 +54,7 @@
                         class="p-1 hover:bg-gray-200 rounded transition-all duration-200 flex-shrink-0"
                       >
                         <svg
-                          class="w-4 h-4 text-gray-600 transition-transform duration-200"
+                          class="w-4 h-4 text-[#2D3748] transition-transform duration-200"
                           [class.rotate-90]="isExpanded(category._id)"
                           fill="none"
                           stroke="currentColor"
@@ -65,35 +65,35 @@
                       </button>
                     } @else {
                       @if (category.level > 0) {
-                        <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 text-[#A0AEC0] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
                       } @else {
                         <div class="w-6 flex-shrink-0"></div>
                       }
                     }
-                    <div class="text-sm font-medium" [class.text-gray-900]="category.level === 0" [class.text-gray-700]="category.level > 0">
+                    <div class="text-sm font-bold" [class.text-[#2D3748]]="category.level === 0" [class.text-[#A0AEC0]]="category.level > 0">
                       {{ category.name }}
                     </div>
                     @if (hasChildren(category)) {
-                      <span class="text-sm text-gray-400">({{ category.children.length }} children)</span>
+                      <span class="text-sm text-[#A0AEC0]">({{ category.children.length }} children)</span>
                     }
                     @if (category.level > 0 && category.parentName) {
-                      <span class="text-sm text-gray-400">(child of {{ category.parentName }})</span>
+                      <span class="text-sm text-[#A0AEC0]">(child of {{ category.parentName }})</span>
                     }
                   </div>
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-500">{{ category.slug || '-' }}</div>
+                <div class="text-sm text-[#A0AEC0]">{{ category.slug || '-' }}</div>
               </td>
               <td class="px-6 py-4">
-                <div class="text-sm text-gray-500 max-w-xs truncate">
+                <div class="text-sm text-[#A0AEC0] max-w-xs truncate">
                   {{ category.description || '-' }}
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-500">
+                <div class="text-sm text-[#A0AEC0]">
                   {{ category.created_at | date: 'short' }}
                 </div>
               </td>
@@ -101,7 +101,7 @@
                 <div class="flex items-center justify-end gap-3">
                   <a
                     [routerLink]="['/categories', category._id, 'edit']"
-                    class="px-4 py-2 text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-xl text-sm text-center transition-all duration-200"
+                    class="px-4 py-2 text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 font-medium rounded-lg text-sm text-center transition-all duration-200"
                   >
                     Edit
                   </a>

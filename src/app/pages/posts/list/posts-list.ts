@@ -291,13 +291,13 @@ export class PostsList implements OnInit {
     protected getStatusBadgeClass(status: string): string {
         switch (status.toLowerCase()) {
             case 'published':
-                return 'px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium';
+                return 'px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold';
             case 'draft':
-                return 'px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium';
+                return 'px-2 py-1 bg-gray-100 text-[#2D3748] rounded-full text-xs font-bold';
             case 'archived':
-                return 'px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium';
+                return 'px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-bold';
             default:
-                return 'px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium';
+                return 'px-2 py-1 bg-[#4FD1C5] bg-opacity-20 text-[#4FD1C5] rounded-full text-xs font-bold';
         }
     }
 }

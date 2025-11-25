@@ -21,8 +21,9 @@ interface MenuItem {
 export class Sidebar {
     private readonly storageService = inject(StorageService);
 
-    public readonly isCollapsed = signal<boolean>(false);
     public readonly userProfile = this.storageService.userProfile;
+
+    public readonly isCollapsed = signal<boolean>(false);
 
     public readonly isAdmin = computed(() => {
         return this.userProfile()?.role === 'admin';
@@ -58,6 +59,6 @@ export class Sidebar {
     });
 
     public toggleCollapse(): void {
-        this.isCollapsed.update((value) => !value);
+        this.isCollapsed.update(value => !value);
     }
 }

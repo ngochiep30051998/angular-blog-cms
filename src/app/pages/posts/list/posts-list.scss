@@ -1,0 +1,14 @@
+// Posts list table styling based on Figma design
+:host {
+    font-family: 'Helvetica', sans-serif;
+    
+    // Table row hover effect
+    .table-row {
+        transition: background-color 0.2s ease;
+        
+        &:hover {
+            background-color: #F7FAFC;
+        }
+    }
+}
+

@@ -1,44 +1,44 @@
 <div class="space-y-6">
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-lg font-bold text-gray-800">Users Management</h1>
-            <p class="text-sm text-gray-500">Manage all users in the system</p>
+            <h1 class="text-lg font-bold text-[#2D3748]">Users Management</h1>
+            <p class="text-sm text-[#A0AEC0]">Manage all users in the system</p>
         </div>
         <a
             routerLink="/users/create"
-            class="text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-xl text-sm px-4 py-2.5 text-center transition-all duration-200"
+            class="text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 font-medium rounded-lg text-sm px-4 py-2.5 text-center transition-all duration-200"
         >
             + New User
         </a>
     </div>
 
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="bg-white rounded-lg shadow-[0px_3.5px_5.5px_0px_rgba(0,0,0,0.02)] overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full">
-                <thead class="bg-gray-50 border-b border-gray-200">
+                <thead class="bg-[#F7FAFC] border-b border-gray-200">
                     <tr>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
                             Name
                         </th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
                             Email
                         </th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
                             Role
                         </th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
                             Status
                         </th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
                             Failed Attempts
                         </th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
                             Locked Until
                         </th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
                             Created At
                         </th>
-                        <th class="px-6 py-3 text-right text-sm font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-right text-xs font-bold text-[#A0AEC0] uppercase tracking-wider">
                             Actions
                         </th>
                     </tr>
@@ -46,38 +46,38 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     @if (users().length === 0) {
                         <tr>
-                            <td colspan="8" class="px-6 py-8 text-center text-gray-500">
+                            <td colspan="8" class="px-6 py-8 text-center text-[#A0AEC0] text-sm">
                                 No users found.
                             </td>
                         </tr>
                     }
                     @for (user of users(); track user._id) {
-                        <tr class="hover:bg-gray-50 transition-colors">
+                        <tr class="hover:bg-[#F7FAFC] transition-colors duration-200 table-row">
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900">{{ user.full_name }}</div>
+                                <div class="text-sm font-bold text-[#2D3748]">{{ user.full_name }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-500">{{ user.email }}</div>
+                                <div class="text-sm text-[#A0AEC0]">{{ user.email }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium capitalize">
+                                <span class="px-2 py-1 bg-[#4FD1C5] bg-opacity-20 text-[#4FD1C5] rounded-full text-xs font-bold capitalize">
                                     {{ user.role }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if (user.locked) {
-                                    <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">Locked</span>
+                                    <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-bold">Locked</span>
                                 } @else {
-                                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">Active</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold">Active</span>
                                 }
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-500">
+                                <div class="text-sm text-[#A0AEC0]">
                                     {{ user.failed_attempts }}
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-500">
+                                <div class="text-sm text-[#A0AEC0]">
                                     @if (getLocalDate(user.locked_until)) {
                                         {{ getLocalDate(user.locked_until) | date:'yyyy-MM-dd HH:mm' }}
                                     } @else {
@@ -86,7 +86,7 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-500">
+                                <div class="text-sm text-[#A0AEC0]">
                                     {{ user.created_at | date: 'short' }}
                                 </div>
                             </td>
@@ -95,8 +95,8 @@
                                     type="button"
                                     (click)="toggleLock(user)"
                                     [class]="user.locked 
-                                        ? 'px-4 py-2 text-white bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-xl text-sm text-center transition-all duration-200'
-                                        : 'px-4 py-2 text-white bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-xl text-sm text-center transition-all duration-200'"
+                                        ? 'px-4 py-2 text-white bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 font-medium rounded-lg text-sm text-center transition-all duration-200'
+                                        : 'px-4 py-2 text-white bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 font-medium rounded-lg text-sm text-center transition-all duration-200'"
                                 >
                                     {{ user.locked ? 'Unlock' : 'Lock' }}
                                 </button>
@@ -109,7 +109,7 @@
 
         @if (totalPages() > 1) {
             <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-                <div class="text-sm text-gray-500">
+                <div class="text-sm text-[#A0AEC0]">
                     Showing {{ showingRange().start }} to {{ showingRange().end }} of {{ total() }} users
                 </div>
                 <div class="flex items-center gap-2">
@@ -117,7 +117,7 @@
                         type="button"
                         (click)="previousPage()"
                         [disabled]="currentPage() === 1"
-                        class="px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-3 py-2 text-sm font-bold text-[#2D3748] bg-[#F7FAFC] hover:bg-gray-200 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Previous
                     </button>
@@ -126,8 +126,8 @@
                             type="button"
                             (click)="goToPage(page)"
                             [class]="page === currentPage()
-                                ? 'px-3 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg'
-                                : 'px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors'"
+                                ? 'px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg'
+                                : 'px-3 py-2 text-sm font-bold text-[#2D3748] bg-[#F7FAFC] hover:bg-gray-200 rounded-lg transition-colors duration-200'"
                         >
                             {{ page }}
                         </button>
@@ -136,7 +136,7 @@
                         type="button"
                         (click)="nextPage()"
                         [disabled]="currentPage() === totalPages()"
-                        class="px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-3 py-2 text-sm font-bold text-[#2D3748] bg-[#F7FAFC] hover:bg-gray-200 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Next
                     </button>

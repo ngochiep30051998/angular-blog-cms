@@ -1,0 +1,23 @@
+// Header styling based on Figma design
+:host {
+    font-family: 'Helvetica', sans-serif;
+    
+    // Breadcrumb styling
+    .breadcrumb-text {
+        font-family: 'Helvetica', sans-serif;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+    
+    // Search input styling
+    input::placeholder {
+        color: #A0AEC0;
+        font-size: 14px;
+    }
+    
+    // Icon buttons hover effect
+    button:hover {
+        background-color: #F7FAFC;
+    }
+}
+

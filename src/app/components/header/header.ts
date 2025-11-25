@@ -1,6 +1,7 @@
-import { Component, inject, computed, signal, HostListener, ElementRef, ViewChild } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Component, inject, computed, signal, HostListener, ElementRef } from '@angular/core';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { StorageService } from '../../services/storage-service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -16,11 +17,28 @@ export class Header {
 
   protected readonly userProfile = this.storageService.userProfile;
   protected readonly isDropdownOpen = signal<boolean>(false);
+  protected readonly currentRoute = signal<string>('');
 
-  protected readonly userInitial = computed(() => {
-    const user = this.userProfile();
-    return user?.full_name?.charAt(0).toUpperCase() || 'A';
-  });
+  constructor() {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.currentRoute.set(event.urlAfterRedirects);
+      });
+    
+    // Set initial route
+    this.currentRoute.set(this.router.url);
+  }
+
+  protected getCurrentPageTitle(): string {
+    const route = this.currentRoute();
+    if (route.includes('/home')) return 'Dashboard';
+    if (route.includes('/posts')) return 'Posts';
+    if (route.includes('/categories')) return 'Categories';
+    if (route.includes('/users')) return 'Users';
+    if (route.includes('/profile')) return 'Profile';
+    return 'Dashboard';
+  }
 
   @HostListener('document:click', ['$event'])
   protected onDocumentClick(event: MouseEvent): void {
