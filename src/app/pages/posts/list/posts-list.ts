@@ -1,18 +1,36 @@
-import { Component, OnInit, inject, signal, computed, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 import { ApiService } from '../../../services/api-service';
 import { LoadingService } from '../../../services/loading-service';
 import { ModalService } from '../../../services/modal-service';
 import { IPostResponse } from '../../../interfaces/post';
 import { ICategoryResponse } from '../../../interfaces/category';
 import { CustomSelect, SelectOption } from '../../../components/custom-select/custom-select';
+import { DeleteConfirmModalComponent } from '../modals/delete-confirm-modal/delete-confirm-modal';
+import { PublishConfirmModalComponent } from '../modals/publish-confirm-modal/publish-confirm-modal';
+import { UnpublishConfirmModalComponent } from '../modals/unpublish-confirm-modal/unpublish-confirm-modal';
+import { PublishMultipleConfirmModalComponent } from '../modals/publish-multiple-confirm-modal/publish-multiple-confirm-modal';
+import { DeleteMultipleConfirmModalComponent } from '../modals/delete-multiple-confirm-modal/delete-multiple-confirm-modal';
+import { UnpublishMultipleConfirmModalComponent } from '../modals/unpublish-multiple-confirm-modal/unpublish-multiple-confirm-modal';
 
 @Component({
     selector: 'app-posts-list',
     standalone: true,
-    imports: [CommonModule, RouterModule, ReactiveFormsModule, CustomSelect],
+    imports: [
+        CommonModule,
+        RouterModule,
+        ReactiveFormsModule,
+        CustomSelect,
+        DeleteConfirmModalComponent,
+        PublishConfirmModalComponent,
+        UnpublishConfirmModalComponent,
+        PublishMultipleConfirmModalComponent,
+        DeleteMultipleConfirmModalComponent,
+        UnpublishMultipleConfirmModalComponent,
+    ],
     templateUrl: './posts-list.html',
     styleUrl: './posts-list.scss',
 })
@@ -22,9 +40,6 @@ export class PostsList implements OnInit {
     private readonly modalService = inject(ModalService);
     private readonly formBuilder = inject(FormBuilder);
 
-    @ViewChild('deleteConfirmTemplate') deleteConfirmTemplate!: TemplateRef<unknown>;
-    @ViewChild('publishConfirmTemplate') publishConfirmTemplate!: TemplateRef<unknown>;
-    @ViewChild('unpublishConfirmTemplate') unpublishConfirmTemplate!: TemplateRef<unknown>;
 
     protected readonly posts = signal<IPostResponse[]>([]);
     protected readonly categories = signal<ICategoryResponse[]>([]);
@@ -32,6 +47,7 @@ export class PostsList implements OnInit {
     protected readonly pageSize = signal<number>(10);
     protected readonly total = signal<number>(0);
     protected readonly totalPages = signal<number>(0);
+    protected readonly selectedPostIds = signal<Set<string>>(new Set());
     protected postToDelete: string | null = null;
     protected postToPublish: IPostResponse | null = null;
     protected publishAction: 'publish' | 'unpublish' | null = null;
@@ -84,6 +100,16 @@ export class PostsList implements OnInit {
             }
         });
         return Array.from(tagSet).sort();
+    });
+
+    protected readonly isAllSelected = computed(() => {
+        const posts = this.posts();
+        if (posts.length === 0) return false;
+        return posts.every((post) => this.selectedPostIds().has(post._id));
+    });
+
+    protected readonly hasSelectedPosts = computed(() => {
+        return this.selectedPostIds().size > 0;
     });
 
     protected readonly statusOptions: SelectOption[] = [
@@ -147,6 +173,8 @@ export class PostsList implements OnInit {
                     this.posts.set(filteredPosts);
                     this.total.set(response.total ?? 0);
                     this.totalPages.set(Math.ceil((response.total ?? 0) / this.pageSize()));
+                    // Clear selections when posts are reloaded
+                    this.selectedPostIds.set(new Set());
                 } else {
                     this.posts.set([]);
                 }
@@ -172,7 +200,7 @@ export class PostsList implements OnInit {
 
     protected deletePost(postId: string): void {
         this.postToDelete = postId;
-        const modalRef = this.modalService.open(this.deleteConfirmTemplate, {
+        const modalRef = this.modalService.open(DeleteConfirmModalComponent, {
             title: 'Confirm Delete',
             width: '400px',
             closeOnBackdropClick: true,
@@ -202,15 +230,16 @@ export class PostsList implements OnInit {
     protected togglePublish(post: IPostResponse): void {
         this.postToPublish = post;
         this.publishAction = post.published_at ? 'unpublish' : 'publish';
-        const template = this.publishAction === 'publish' 
-            ? this.publishConfirmTemplate 
-            : this.unpublishConfirmTemplate;
+        const modalComponent = this.publishAction === 'publish' 
+            ? PublishConfirmModalComponent 
+            : UnpublishConfirmModalComponent;
         
-        const modalRef = this.modalService.open(template, {
+        const modalRef = this.modalService.open(modalComponent, {
             title: this.publishAction === 'publish' ? 'Publish Post' : 'Unpublish Post',
             width: '400px',
             closeOnBackdropClick: true,
             showCloseButton: true,
+            data: { postTitle: post.title },
         });
 
         modalRef.afterClosed().then((result) => {
@@ -251,21 +280,6 @@ export class PostsList implements OnInit {
         });
     }
 
-    protected confirmDelete(): void {
-        this.modalService.close(true);
-    }
-
-    protected cancelDelete(): void {
-        this.modalService.close(false);
-    }
-
-    protected confirmPublish(): void {
-        this.modalService.close(true);
-    }
-
-    protected cancelPublish(): void {
-        this.modalService.close(false);
-    }
 
     protected goToPage(page: number): void {
         if (page >= 1 && page <= this.totalPages()) {
@@ -299,6 +313,157 @@ export class PostsList implements OnInit {
             default:
                 return 'px-2 py-1 bg-[#4FD1C5] bg-opacity-20 text-[#4FD1C5] rounded-full text-xs font-bold';
         }
+    }
+
+    protected togglePostSelection(postId: string): void {
+        const selected = new Set(this.selectedPostIds());
+        if (selected.has(postId)) {
+            selected.delete(postId);
+        } else {
+            selected.add(postId);
+        }
+        this.selectedPostIds.set(selected);
+    }
+
+    protected toggleSelectAll(): void {
+        const posts = this.posts();
+        const selected = new Set(this.selectedPostIds());
+        
+        if (this.isAllSelected()) {
+            // Deselect all
+            posts.forEach((post) => selected.delete(post._id));
+        } else {
+            // Select all
+            posts.forEach((post) => selected.add(post._id));
+        }
+        this.selectedPostIds.set(selected);
+    }
+
+    protected isPostSelected(postId: string): boolean {
+        return this.selectedPostIds().has(postId);
+    }
+
+    protected publishMultiplePosts(): void {
+        const selectedIds = Array.from(this.selectedPostIds());
+        if (selectedIds.length === 0) {
+            return;
+        }
+
+        const modalRef = this.modalService.open(PublishMultipleConfirmModalComponent, {
+            title: 'Publish Multiple Posts',
+            width: '400px',
+            closeOnBackdropClick: true,
+            showCloseButton: true,
+            data: { selectedCount: selectedIds.length },
+        });
+
+        modalRef.afterClosed().then((result) => {
+            if (result === true) {
+                this.performPublishMultiple(selectedIds);
+            }
+        });
+    }
+
+    private performPublishMultiple(postIds: string[]): void {
+        this.loadingService.show();
+        const publishObservables = postIds.map((postId) => 
+            this.apiService.publishPost(postId)
+        );
+
+        forkJoin(publishObservables).subscribe({
+            next: () => {
+                this.selectedPostIds.set(new Set());
+                this.loadPosts();
+            },
+            error: () => {
+                this.loadingService.hide();
+                // Still reload to show current state
+                this.selectedPostIds.set(new Set());
+                this.loadPosts();
+            },
+        });
+    }
+
+    protected deleteMultiplePosts(): void {
+        const selectedIds = Array.from(this.selectedPostIds());
+        if (selectedIds.length === 0) {
+            return;
+        }
+
+        const modalRef = this.modalService.open(DeleteMultipleConfirmModalComponent, {
+            title: 'Delete Multiple Posts',
+            width: '400px',
+            closeOnBackdropClick: true,
+            showCloseButton: true,
+            data: { selectedCount: selectedIds.length },
+        });
+
+        modalRef.afterClosed().then((result) => {
+            if (result === true) {
+                this.performDeleteMultiple(selectedIds);
+            }
+        });
+    }
+
+    private performDeleteMultiple(postIds: string[]): void {
+        this.loadingService.show();
+        const deleteObservables = postIds.map((postId) => 
+            this.apiService.deletePost(postId)
+        );
+
+        forkJoin(deleteObservables).subscribe({
+            next: () => {
+                this.selectedPostIds.set(new Set());
+                this.loadPosts();
+            },
+            error: () => {
+                this.loadingService.hide();
+                // Still reload to show current state
+                this.selectedPostIds.set(new Set());
+                this.loadPosts();
+            },
+        });
+    }
+
+    protected unpublishMultiplePosts(): void {
+        const selectedIds = Array.from(this.selectedPostIds());
+        if (selectedIds.length === 0) {
+            return;
+        }
+
+        const modalRef = this.modalService.open(UnpublishMultipleConfirmModalComponent, {
+            title: 'Unpublish Multiple Posts',
+            width: '400px',
+            closeOnBackdropClick: true,
+            showCloseButton: true,
+            data: { selectedCount: selectedIds.length },
+        });
+
+        modalRef.afterClosed().then((result) => {
+            if (result === true) {
+                this.performUnpublishMultiple(selectedIds);
+            }
+        });
+    }
+
+    private performUnpublishMultiple(postIds: string[]): void {
+        this.loadingService.show();
+        const unpublishObservables = postIds.map((postId) => 
+            this.apiService.unpublishPost(postId)
+        );
+
+        forkJoin(unpublishObservables).subscribe({
+            next: () => {
+                this.selectedPostIds.set(new Set());
+                this.loadPosts();
+            },
+            error: () => {
+                this.loadingService.hide();
+                // Still reload to show current state
+                this.selectedPostIds.set(new Set());
+                this.loadPosts();
+            },
+        });
     }
 }
 

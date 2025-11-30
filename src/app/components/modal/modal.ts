@@ -73,13 +73,24 @@ export class ModalComponent implements OnDestroy {
             const componentRef = this.overlayRef.attach(portal);
             // Pass data to component if it has a data input
             if (config.data) {
-                const instance = componentRef.instance as { data?: Record<string, unknown>; message?: string };
+                const instance = componentRef.instance as {
+                    data?: Record<string, unknown>;
+                    message?: string;
+                    postTitle?: string;
+                    selectedCount?: number;
+                };
                 if ('data' in instance) {
                     instance.data = config.data;
                 }
-                // Also set message directly if the component has a message input
+                // Also set properties directly if the component has them
                 if ('message' in instance && config.data['message']) {
                     instance.message = config.data['message'] as string;
+                }
+                if ('postTitle' in instance && config.data['postTitle']) {
+                    instance.postTitle = config.data['postTitle'] as string;
+                }
+                if ('selectedCount' in instance && config.data['selectedCount']) {
+                    instance.selectedCount = config.data['selectedCount'] as number;
                 }
             }
         }
